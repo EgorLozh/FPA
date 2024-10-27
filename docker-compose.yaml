@@ -1,0 +1,24 @@
+services:
+  app:
+    container_name: app
+    build: .
+    command: poetry run python app/manage.py runserver 0.0.0.0:8000
+    # command: "tree -L 4"
+    volumes:
+      - .:/app
+    ports:
+      - "${API_PORT}:8000"
+    depends_on:
+      - db
+  db:
+    container_name: db
+    image: postgres:latest
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+
+volumes:
+  postgres_data:
