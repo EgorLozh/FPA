@@ -7,12 +7,12 @@ WORKDIR /app
 
 RUN pip install poetry
 
+ENV PYTHONPATH=/app
+
 COPY pyproject.toml poetry.lock ./
 
 RUN poetry install --no-root
 
 COPY . .
-
-ENV PYTHONUNBUFFERED=1
 
 EXPOSE 8000
