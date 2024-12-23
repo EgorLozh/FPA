@@ -1,144 +1,114 @@
 <template>
   <div id="app">
-    <!-- Навигация -->
-    <nav class="navigation">
-      <div class="logo">MyApp</div>
-      <div class="nav-buttons">
-        <button @click="goTo('home')">Home</button>
-        <button @click="goTo('about')">About</button>
-        <button @click="goTo('contact')">Contact</button>
-        <button @click="goTo('login')">Login</button>
-      </div>
-    </nav>
+    <!-- Навигационная панель -->
+    <Navbar />
 
-    <!-- Основной контент (Dashboard) -->
-    <main class="dashboard">
-      <section class="search-bar">
-        <input type="text" placeholder="Search stores or employees..." />
-      </section>
+    <!-- Основной контент: Dashboard -->
+    <main>
+      <Dashboard>
+        <!-- Секция с сотрудниками -->
+        <section class="employee-section">
+          <h2>Employees</h2>
+          <input type="text" placeholder="Search employees..." v-model="searchQuery" />
+          <div class="employee-list">
+            <EmployeeCard
+              v-for="employee in filteredEmployees"
+              :key="employee.id"
+              :name="employee.name"
+              :score="employee.score"
+              :rating="employee.rating"
+              :avatar="employee.avatar"
+            />
+          </div>
+        </section>
 
-      <section class="store-list-section">
-        <h2>Stores</h2>
-        <StoreList :stores="stores" />
-      </section>
-
-      <section class="employee-list-section">
-        <h2>Employees</h2>
-        <EmployeeCard
-          v-for="employee in employees"
-          :key="employee.id"
-          :name="employee.name"
-          :score="employee.score"
-          :rating="employee.rating"
-          :avatar="employee.avatar"
-        />
-      </section>
+        <!-- Секция с магазинами -->
+        <section class="store-section">
+          <h2>Stores</h2>
+          <StoreList :stores="stores" />
+        </section>
+      </Dashboard>
     </main>
 
-    <!-- Подвал (необязательно) -->
-    <footer v-if="showFooter" class="footer">
-      <p>MyApp &copy; 2024. All Rights Reserved.</p>
-    </footer>
+    <!-- Футер -->
+    <Footer />
   </div>
 </template>
 
 <script>
-import EmployeeCard from './components/EmployeeCard.vue';
-import StoreList from './components/StoreList.vue';
+import Navbar from "./components/Navbar.vue";
+import Dashboard from "./components/Dashboard.vue";
+import EmployeeCard from "./components/EmployeeCard.vue";
+import Footer from "./components/Footer.vue";
+import StoreList from "./components/StoreList.vue";
 
 export default {
-  components: { EmployeeCard, StoreList },
+  components: {
+    Navbar,
+    Dashboard,
+    EmployeeCard,
+    Footer,
+    StoreList,
+  },
   data() {
     return {
+      searchQuery: "",
       employees: [
-        { id: 1, name: 'Bob Smith', score: '92%', rating: '9/10', avatar: 'cat1.jpg' },
-        { id: 2, name: 'Jane Doe', score: '98%', rating: '10/10', avatar: 'cat2.jpg' },
-        { id: 3, name: 'John Johnson', score: '80%', rating: '8/10', avatar: 'cat3.jpg' }
+        { id: 1, name: "Bob Smith", score: "92%", rating: "9/10", avatar: "cat1.jpg" },
+        { id: 2, name: "Jane Doe", score: "98%", rating: "10/10", avatar: "cat2.jpg" },
+        { id: 3, name: "John Johnson", score: "80%", rating: "8/10", avatar: "cat3.jpg" },
       ],
-      stores: ['Downtown Store', 'Uptown Store', 'Midtown Store', 'Westside Store', 'Eastside Store'],
-      showFooter: true
+      stores: [
+        { id: 1, name: "Downtown Store" },
+        { id: 2, name: "Uptown Store" },
+        { id: 3, name: "Midtown Store" },
+        { id: 4, name: "Westside Store" },
+        { id: 5, name: "Eastside Store" },
+      ],
     };
   },
-  methods: {
-    goTo(page) {
-      console.log(`Navigating to ${page}`);
-    }
-  }
+  computed: {
+    filteredEmployees() {
+      return this.employees.filter((employee) =>
+        employee.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    },
+  },
 };
 </script>
 
-<style>
-/* Общие стили */
+<style scoped>
 #app {
-  font-family: Arial, sans-serif;
-  color: #f0f0f0;
-  background-color: #121212;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* Навигация */
-.navigation {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #1e1e1e;
-  padding: 15px 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  flex-direction: column;
+  height: 100%;
 }
 
-.navigation .logo {
-  font-size: 1.5rem;
-  font-weight: bold;
+main {
+  flex-grow: 1;
+  padding: 20px 5%;
 }
 
-.navigation .nav-buttons button {
-  margin-left: 10px;
-  padding: 10px 15px;
-  background-color: #333;
-  border: none;
-  border-radius: 5px;
-  color: #f0f0f0;
-  cursor: pointer;
-}
-
-.navigation .nav-buttons button:hover {
-  background-color: #555;
-}
-
-/* Dashboard */
-.dashboard {
-  padding: 20px;
-}
-
-.search-bar input {
-  padding: 10px;
-  width: 100%;
-  border: none;
-  border-radius: 5px;
-  background-color: #333;
-  color: #f0f0f0;
-  margin-bottom: 20px;
-}
-
-.store-list-section,
-.employee-list-section {
+.employee-section,
+.store-section {
   margin-bottom: 40px;
 }
 
-.store-list-section h2,
-.employee-list-section h2 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #555;
-  padding-bottom: 5px;
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
-/* Подвал */
-.footer {
-  text-align: center;
-  padding: 10px 0;
-  background-color: #1e1e1e;
-  color: #aaa;
+.employee-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.store-section {
+  margin-top: 30px;
 }
 </style>
