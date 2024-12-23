@@ -2,7 +2,7 @@
   <div class="app-container">
     <Navbar />
     <div class="main-content">
-      <Dashboard>
+      <Dashboard :stores="stores" :employees="employees">
         <template #header>
           <h1>Script Tracker</h1>
         </template>
@@ -19,19 +19,6 @@
           <button class="btn-secondary">Log in / Sign up</button>
         </template>
       </Dashboard>
-      <section class="employees-section">
-        <h2>Employees</h2>
-        <div class="employee-cards">
-          <EmployeeCard
-            v-for="employee in employees"
-            :key="employee.name"
-            :name="employee.name"
-            :score="employee.score"
-            :rating="employee.rating"
-          />
-        </div>
-      </section>
-      <StoreList :stores="stores" />
     </div>
     <Footer />
   </div>
@@ -41,12 +28,10 @@
 import Navbar from "@/components/Navbar.vue";
 import Footer from "@/components/Footer.vue";
 import Dashboard from "@/components/Dashboard.vue";
-import EmployeeCard from "@/components/EmployeeCard.vue";
-import StoreList from "@/components/StoreList.vue";
 
 export default {
   name: "App",
-  components: { Navbar, Footer, Dashboard, EmployeeCard, StoreList },
+  components: { Navbar, Footer, Dashboard },
   data() {
     return {
       employees: [
@@ -80,16 +65,6 @@ export default {
   flex: 1;
   width: 100%;
   padding: 16px;
-}
-
-.employees-section {
-  margin-top: 32px;
-}
-
-.employee-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
 }
 
 .menu-list {
