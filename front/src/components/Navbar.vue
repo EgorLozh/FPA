@@ -32,8 +32,8 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: #333;
-    color: #fff;
+    background-color: var(--vt-c-white);
+    color: var(--vt-c-black);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -44,20 +44,30 @@
     display: flex;
     gap: 20px;
     flex-grow: 1;
+    justify-content: center;
   }
   
   .nav-links a {
-    color: white;
+    color: var(--vt-c-black);
     text-decoration: none;
   }
   
+  .logo {
+    flex-grow: 1;
+  }
+
+  .actions {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+  }
+
   .actions button {
     margin-left: 10px;
     padding: 5px 10px;
-    background-color: #444;
-    color: white;
+    background-color: var(--vt-c-white-soft);
+    color: var(--vt-c-black);
     border: none;
     cursor: pointer;
   }
   </style>
-  

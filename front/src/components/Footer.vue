@@ -11,9 +11,8 @@
   <style>
   .footer {
     padding: 10px 20px;
-    background: #333;
-    color: white;
+    background: var(--vt-c-white);
+    color: var(--vt-c-black);
     text-align: center;
   }
   </style>
-  
