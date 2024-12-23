@@ -1,53 +1,38 @@
 <template>
-  <div class="employee-card">
-    <img :src="avatar" :alt="name" />
+  <li class="employee-card">
+    <img :src="avatar" alt="Avatar" />
     <div>
-      <h3>{{ name }}</h3>
-      <p>Compliance Score: {{ score }}</p>
-      <p>{{ rating }}</p>
+      <h4>{{ name }}</h4>
+      <p>Score: {{ score }}</p>
+      <p>Rating: {{ rating }}</p>
     </div>
-  </div>
+  </li>
 </template>
 
-<script setup>
-defineProps({
-  name: String,
-  score: String,
-  rating: String,
-  avatar: String,
-});
+<script>
+export default {
+  props: {
+    name: String,
+    score: String,
+    rating: String,
+    avatar: String,
+  },
+};
 </script>
 
-<style scoped>
+<style>
 .employee-card {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background: #fff;
-  margin-bottom: 10px;
-  padding: 10px 15px;
+  gap: 10px;
+  padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
 }
 
-.avatar {
+.employee-card img {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-}
-
-.employee-info h3 {
-  margin: 0;
-  font-size: 1.1em;
-}
-
-.employee-info p {
-  margin: 5px 0 0;
-  font-size: 0.9em;
-  color: #666;
-}
-
-.rating {
-  font-weight: bold;
 }
 </style>
