@@ -59,6 +59,12 @@
 }
 
 body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);

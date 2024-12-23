@@ -43,6 +43,7 @@
     list-style: none;
     display: flex;
     gap: 20px;
+    flex-grow: 1;
   }
   
   .nav-links a {

@@ -68,6 +68,9 @@ export default {
 
 <style>
 .app-container {
+  width: 100%;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -75,6 +78,7 @@ export default {
 
 .main-content {
   flex: 1;
+  width: 100%;
   padding: 16px;
 }
 
