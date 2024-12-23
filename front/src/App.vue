@@ -1,114 +1,115 @@
 <template>
-  <div id="app">
-    <!-- Навигационная панель -->
+  <div class="app-container">
     <Navbar />
-
-    <!-- Основной контент: Dashboard -->
-    <main>
+    <div class="main-content">
       <Dashboard>
-        <!-- Секция с сотрудниками -->
-        <section class="employee-section">
-          <h2>Employees</h2>
-          <input type="text" placeholder="Search employees..." v-model="searchQuery" />
-          <div class="employee-list">
-            <EmployeeCard
-              v-for="employee in filteredEmployees"
-              :key="employee.id"
-              :name="employee.name"
-              :score="employee.score"
-              :rating="employee.rating"
-              :avatar="employee.avatar"
-            />
-          </div>
-        </section>
-
-        <!-- Секция с магазинами -->
-        <section class="store-section">
-          <h2>Stores</h2>
-          <StoreList :stores="stores" />
-        </section>
+        <template #header>
+          <h1>Script Tracker</h1>
+        </template>
+        <template #menu>
+          <ul class="menu-list">
+            <li>Dashboard</li>
+            <li>Reports</li>
+            <li>Employees</li>
+            <li>Stores</li>
+          </ul>
+        </template>
+        <template #actions>
+          <button class="btn-primary">New Report</button>
+          <button class="btn-secondary">Log in / Sign up</button>
+        </template>
       </Dashboard>
-    </main>
-
-    <!-- Футер -->
+      <section class="employees-section">
+        <h2>Employees</h2>
+        <div class="employee-cards">
+          <EmployeeCard
+            v-for="employee in employees"
+            :key="employee.name"
+            :name="employee.name"
+            :score="employee.score"
+            :rating="employee.rating"
+          />
+        </div>
+      </section>
+      <StoreList :stores="stores" />
+    </div>
     <Footer />
   </div>
 </template>
 
 <script>
-import Navbar from "./components/Navbar.vue";
-import Dashboard from "./components/Dashboard.vue";
-import EmployeeCard from "./components/EmployeeCard.vue";
-import Footer from "./components/Footer.vue";
-import StoreList from "./components/StoreList.vue";
+import Navbar from "@/components/Navbar.vue";
+import Footer from "@/components/Footer.vue";
+import Dashboard from "@/components/Dashboard.vue";
+import EmployeeCard from "@/components/EmployeeCard.vue";
+import StoreList from "@/components/StoreList.vue";
 
 export default {
-  components: {
-    Navbar,
-    Dashboard,
-    EmployeeCard,
-    Footer,
-    StoreList,
-  },
+  name: "App",
+  components: { Navbar, Footer, Dashboard, EmployeeCard, StoreList },
   data() {
     return {
-      searchQuery: "",
       employees: [
-        { id: 1, name: "Bob Smith", score: "92%", rating: "9/10", avatar: "cat1.jpg" },
-        { id: 2, name: "Jane Doe", score: "98%", rating: "10/10", avatar: "cat2.jpg" },
-        { id: 3, name: "John Johnson", score: "80%", rating: "8/10", avatar: "cat3.jpg" },
+        { name: "Bob Smith", score: 92, rating: 9 },
+        { name: "Jane Doe", score: 98, rating: 10 },
+        { name: "John Johnson", score: 80, rating: 8 },
       ],
       stores: [
-        { id: 1, name: "Downtown Store" },
-        { id: 2, name: "Uptown Store" },
-        { id: 3, name: "Midtown Store" },
-        { id: 4, name: "Westside Store" },
-        { id: 5, name: "Eastside Store" },
+        { name: "Downtown Store", vector: "path/to/vector02.svg" },
+        { name: "Uptown Store", vector: "path/to/vector03.svg" },
+        { name: "Midtown Store", vector: "path/to/vector04.svg" },
+        { name: "Westside Store", vector: "path/to/vector05.svg" },
+        { name: "Eastside Store", vector: "path/to/vector06.svg" },
       ],
     };
-  },
-  computed: {
-    filteredEmployees() {
-      return this.employees.filter((employee) =>
-        employee.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-    },
   },
 };
 </script>
 
-<style scoped>
-#app {
+<style>
+.app-container {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  min-height: 100vh;
 }
 
-main {
-  flex-grow: 1;
-  padding: 20px 5%;
+.main-content {
+  flex: 1;
+  padding: 16px;
 }
 
-.employee-section,
-.store-section {
-  margin-bottom: 40px;
+.employees-section {
+  margin-top: 32px;
 }
 
-input[type="text"] {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+.employee-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
 }
 
-.employee-list {
+.menu-list {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  gap: 16px;
+  list-style: none;
+  padding: 0;
 }
 
-.store-section {
-  margin-top: 30px;
+.btn-primary {
+  background-color: #2193f2;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background-color: #e8edf4;
+  color: #0c141c;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 </style>
