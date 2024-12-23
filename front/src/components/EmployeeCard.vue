@@ -13,8 +13,8 @@
 export default {
   props: {
     name: String,
-    score: String,
-    rating: String,
+    score: Number,
+    rating: Number,
     avatar: String,
   },
 };
