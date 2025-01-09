@@ -28,3 +28,51 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+# Global ignores
+.env
+.DS_Store
+Thumbs.db
+venv/
+*.log
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.tsbuildinfo
+
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+
+# Node modules
+node_modules
+
+# Build output
+dist
+dist-ssr
+coverage
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+
+# Cypress
+/cypress/videos/
+/cypress/screenshots/
+
+# Specific to FPA/front
+FPA/front/node_modules
+FPA/front/dist
+FPA/front/dist-ssr
+FPA/front/coverage
+FPA/front/*.local
+
+# Ignore lock files
+poetry.lock
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
