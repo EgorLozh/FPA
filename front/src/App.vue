@@ -2,7 +2,7 @@
   <div class="app-container">
     <Navbar />
     <div class="main-content">
-      <Dashboard :stores="stores" :employees="employees">
+      <Dashboard :stores="storesWithEmployees" :employees="employees">
         <template #header>
           <h1>Script Tracker</h1>
         </template>
@@ -49,6 +49,16 @@ export default {
       ],
     };
   },
+  computed: {
+    storesWithEmployees() {
+      return this.stores.map(store => {
+        return {
+          ...store,
+          employees: this.employees.filter(employee => employee.storeId === store.id)
+        };
+      });
+    }
+  }
 };
 </script>
 

@@ -12,7 +12,11 @@
             <EmployeeCard
               v-for="employee in store.employees"
               :key="employee.id"
-              v-bind="employee"
+              :name="employee.name"
+              :score="employee.score"
+              :rating="employee.rating"
+              :avatar="employee.avatar"
+              :storeName="store.name"
             />
           </ul>
         </details>
