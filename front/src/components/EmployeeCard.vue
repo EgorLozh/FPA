@@ -1,10 +1,11 @@
 <template>
   <li class="employee-card">
-    <img :src="avatar || defaultAvatar" alt="Avatar" />
+    <img :src="avatar || defaultAvatar" :alt="`Avatar of ${name || 'Unnamed Employee'}`" />
     <div>
       <h4>{{ name || "Unnamed Employee" }}</h4>
       <p>Score: {{ score ?? "N/A" }}</p>
       <p>Rating: {{ rating ?? "N/A" }}</p>
+      <p v-if="storeName">Store: {{ storeName }}</p>
     </div>
   </li>
 </template>
@@ -25,6 +26,10 @@ export default {
       default: null,
     },
     avatar: {
+      type: String,
+      default: "",
+    },
+    storeName: {
       type: String,
       default: "",
     },

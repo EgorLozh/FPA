@@ -1,5 +1,6 @@
 <template>
   <section class="dashboard">
+    <!-- Поиск магазинов -->
     <div class="search-bar">
       <input 
         type="text" 
@@ -13,50 +14,24 @@
       :stores="filteredStores" 
       @selectStore="selectStore"
     />
-    <section class="employees-section">
-      <h2 v-if="selectedStore">
-        Employees at {{ selectedStore.name }}
-      </h2>
-      <h2 v-else>All Employees</h2>
-      <div class="employee-cards">
-        <EmployeeCard
-          v-for="employee in filteredEmployees"
-          :key="employee.id"
-          :name="employee.name"
-          :score="employee.score"
-          :rating="employee.rating"
-        />
-      </div>
-    </section>
   </section>
 </template>
 
 <script>
 import StoreList from './StoreList.vue';
-import EmployeeCard from './EmployeeCard.vue';
 
 export default {
-  components: { StoreList, EmployeeCard },
+  components: { StoreList },
   props: {
     stores: Array,
     employees: Array,
   },
   data() {
     return {
-      searchQuery: "",
+      searchQuery: "", // Поиск по магазинам
       filteredStores: this.stores,
       selectedStore: null,
     };
-  },
-  computed: {
-    filteredEmployees() {
-      if (this.selectedStore) {
-        return this.employees.filter(
-          (employee) => employee.storeId === this.selectedStore.id
-        );
-      }
-      return this.employees;
-    },
   },
   methods: {
     filterStores() {
@@ -79,7 +54,7 @@ export default {
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin: 0 auto; /* Center the dashboard */
+  margin: 0 auto; /* Центрирование дашборда */
 }
 
 .search-bar {
@@ -94,15 +69,5 @@ export default {
   margin-bottom: 20px;
   border: 1px solid #ddd;
   border-radius: 5px;
-}
-
-.employees-section {
-  margin-top: 32px;
-}
-
-.employee-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
 }
 </style>
