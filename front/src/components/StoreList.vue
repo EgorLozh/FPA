@@ -1,8 +1,12 @@
 <template>
   <div>
     <ul class="store-list">
-      <li v-for="store in stores" :key="store.id" class="store-card">
-        <details>
+      <li 
+        v-for="store in stores" 
+        :key="store.id" 
+        class="store-card"
+      >
+        <details @toggle="handleSelectStore(store)">
           <summary>{{ store.name }}</summary>
           <ul class="employee-list">
             <EmployeeCard
@@ -25,25 +29,12 @@ export default {
   props: {
     stores: {
       type: Array,
-      default: () => [
-        {
-          id: 1,
-          name: "Downtown Store",
-          employees: [
-            { id: 1, name: "Bob Smith", score: 92, rating: 9, avatar: "path/to/avatar1.jpg" },
-            { id: 2, name: "Jane Doe", score: 98, rating: 10, avatar: "path/to/avatar2.jpg" },
-          ],
-        },
-        {
-          id: 2,
-          name: "Uptown Store",
-          employees: [
-            { id: 3, name: "John Johnson", score: 80, rating: 8, avatar: "path/to/avatar3.jpg" },
-            { id: 4, name: "Alice Brown", score: 85, rating: 8, avatar: "path/to/avatar4.jpg" },
-          ],
-        },
-        // Add more stores with placeholder employees as needed
-      ],
+      required: true,
+    },
+  },
+  methods: {
+    handleSelectStore(store) {
+      this.$emit("selectStore", store);
     },
   },
 };
