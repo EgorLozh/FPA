@@ -1,10 +1,10 @@
 <template>
   <li class="employee-card">
-    <img :src="avatar" alt="Avatar" />
+    <img :src="avatar || defaultAvatar" alt="Avatar" />
     <div>
-      <h4>{{ name }}</h4>
-      <p>Score: {{ score }}</p>
-      <p>Rating: {{ rating }}</p>
+      <h4>{{ name || "Unnamed Employee" }}</h4>
+      <p>Score: {{ score ?? "N/A" }}</p>
+      <p>Rating: {{ rating ?? "N/A" }}</p>
     </div>
   </li>
 </template>
@@ -12,10 +12,27 @@
 <script>
 export default {
   props: {
-    name: String,
-    score: Number,
-    rating: Number,
-    avatar: String,
+    name: {
+      type: String,
+      default: "Unnamed Employee",
+    },
+    score: {
+      type: Number,
+      default: null,
+    },
+    rating: {
+      type: Number,
+      default: null,
+    },
+    avatar: {
+      type: String,
+      default: "",
+    },
+  },
+  computed: {
+    defaultAvatar() {
+      return "path/to/default-avatar.jpg"; // Укажите путь к изображению по умолчанию
+    },
   },
 };
 </script>
@@ -34,5 +51,17 @@ export default {
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  object-fit: cover; /* Подгонка изображения для предотвращения искажений */
+}
+
+.employee-card div h4 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.employee-card div p {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
 }
 </style>

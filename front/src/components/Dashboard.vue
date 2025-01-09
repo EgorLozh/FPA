@@ -1,16 +1,27 @@
 <template>
   <section class="dashboard">
     <div class="search-bar">
-      <input type="text" placeholder="Search stores..." />
+      <input 
+        type="text" 
+        v-model="searchQuery" 
+        placeholder="Search stores..." 
+        @input="filterStores" 
+      />
     </div>
     <h2>Store Rankings</h2>
-    <StoreList :stores="stores" />
+    <StoreList 
+      :stores="filteredStores" 
+      @selectStore="selectStore"
+    />
     <section class="employees-section">
-      <h2>Employees</h2>
+      <h2 v-if="selectedStore">
+        Employees at {{ selectedStore.name }}
+      </h2>
+      <h2 v-else>All Employees</h2>
       <div class="employee-cards">
         <EmployeeCard
-          v-for="employee in employees"
-          :key="employee.name"
+          v-for="employee in filteredEmployees"
+          :key="employee.id"
           :name="employee.name"
           :score="employee.score"
           :rating="employee.rating"
@@ -29,6 +40,34 @@ export default {
   props: {
     stores: Array,
     employees: Array,
+  },
+  data() {
+    return {
+      searchQuery: "",
+      filteredStores: this.stores,
+      selectedStore: null,
+    };
+  },
+  computed: {
+    filteredEmployees() {
+      if (this.selectedStore) {
+        return this.employees.filter(
+          (employee) => employee.storeId === this.selectedStore.id
+        );
+      }
+      return this.employees;
+    },
+  },
+  methods: {
+    filterStores() {
+      const query = this.searchQuery.toLowerCase();
+      this.filteredStores = this.stores.filter((store) =>
+        store.name.toLowerCase().includes(query)
+      );
+    },
+    selectStore(store) {
+      this.selectedStore = store;
+    },
   },
 };
 </script>
