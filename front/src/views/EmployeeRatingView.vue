@@ -13,17 +13,21 @@
         <option value="score">Score</option>
         <option value="storeName">Store</option>
       </select>
+      <button @click="toggleSortOrder">
+        {{ sortOrder === 'asc' ? 'Ascending' : 'Descending' }}
+      </button>
     </div>
     <ul class="employee-list">
-      <EmployeeCard
-        v-for="employee in filteredEmployees"
-        :key="employee.id"
-        :name="employee.name"
-        :score="employee.score"
-        :rating="calculateRating(employee.score)"
-        :avatar="employee.avatar"
-        :storeName="employee.storeName"
-      />
+      <li v-for="(employee, index) in filteredEmployees" :key="employee.id">
+        <span>{{ index + 1 }}</span>
+        <EmployeeCard
+          :name="employee.name"
+          :score="employee.score"
+          :rating="calculateRating(employee.score)"
+          :avatar="employee.avatar"
+          :storeName="getStoreName(employee)"
+        />
+      </li>
     </ul>
   </section>
 </template>
@@ -35,12 +39,15 @@ export default {
   components: { EmployeeCard },
   props: {
     employees: Array,
+    stores: Array,
+    calculateRating: Function,
   },
   data() {
     return {
       employeeSearchQuery: "",
       filteredEmployees: [],
       sortKey: "name",
+      sortOrder: "asc",
     };
   },
   mounted() {
@@ -66,17 +73,26 @@ export default {
     },
     sortEmployees() {
       this.filteredEmployees.sort((a, b) => {
+        let result;
         if (this.sortKey === "score") {
-          return b.score - a.score;
+          result = b.score - a.score;
         } else if (this.sortKey === "storeName") {
-          return a.storeName.localeCompare(b.storeName);
+          const storeA = this.getStoreName(a);
+          const storeB = this.getStoreName(b);
+          result = storeA.localeCompare(storeB);
         } else {
-          return a.name.localeCompare(b.name);
+          result = a.name.localeCompare(b.name);
         }
+        return this.sortOrder === 'asc' ? result : -result;
       });
     },
-    calculateRating(score) {
-      return (score / 20).toFixed(2); // Example calculation
+    toggleSortOrder() {
+      this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+      this.sortEmployees();
+    },
+    getStoreName(employee) {
+      const store = this.stores.find(store => store.id === employee.storeId);
+      return store ? store.name : 'Unknown Store';
     },
   },
 };
@@ -111,5 +127,24 @@ export default {
   border: 1px solid #ddd;
   border-radius: 5px;
   margin-left: 10px;
+}
+
+.employee-search button {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.employee-list li {
+  display: flex;
+  align-items: center;
+  width: 100%; /* Allow the list items to take full width */
+}
+
+.employee-list li span {
+  margin-right: 10px;
+  font-weight: bold;
 }
 </style>

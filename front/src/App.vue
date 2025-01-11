@@ -2,7 +2,10 @@
   <div class="app-container">
     <Navbar />
     <div class="main-content">
-      <router-view :employees="employees" :stores="stores" />
+      <router-view
+       :employees="employees" 
+       :stores="stores" 
+       :calculateRating="calculateRating" />
     </div>
     <Footer />
   </div>
@@ -18,10 +21,20 @@ export default {
   data() {
     return {
       employees: [
-        { id: 1, name: "Bob Smith", score: 92, rating: 9, storeId: 1 },
-        { id: 2, name: "Jane Doe", score: 98, rating: 10, storeId: 1 },
-        { id: 3, name: "John Johnson", score: 80, rating: 8, storeId: 2 },
-        { id: 4, name: "Alice Brown", score: 85, rating: 8, storeId: 3 },
+        { id: 1, name: "Bob Smith", score: 92, rating: 0, storeId: 1 },
+        { id: 2, name: "Jane Doe", score: 98, rating: 0, storeId: 1 },
+        { id: 3, name: "John Johnson", score: 80, rating: 0, storeId: 2 },
+        { id: 4, name: "Alice Brown", score: 85, rating: 0, storeId: 3 },
+        { id: 5, name: "Random Person 1", score: Math.floor(Math.random() * 100), rating: 0, storeId: Math.floor(Math.random() * 5) + 1 },
+        { id: 6, name: "Random Person 2", score: Math.floor(Math.random() * 100), rating: 0, storeId: Math.floor(Math.random() * 5) + 1 },
+        { id: 7, name: "Random Person 3", score: Math.floor(Math.random() * 100), rating: 0, storeId: Math.floor(Math.random() * 5) + 1 },
+        { id: 8, name: "Random Person 4", score: Math.floor(Math.random() * 100), rating: 0, storeId: Math.floor(Math.random() * 5) + 1 },
+        { id: 9, name: "Random Person 5", score: Math.floor(Math.random() * 100), rating: 0, storeId: Math.floor(Math.random() * 5) + 1 },
+        { id: 10, name: "Random Person 6", score: Math.floor(Math.random() * 100), rating: 0, storeId: Math.floor(Math.random() * 5) + 1 },
+        { id: 11, name: "Random Person 7", score: Math.floor(Math.random() * 100), rating: 0, storeId: Math.floor(Math.random() * 5) + 1 },
+        { id: 12, name: "Random Person 8", score: Math.floor(Math.random() * 100), rating: 0, storeId: Math.floor(Math.random() * 5) + 1 },
+        { id: 13, name: "Random Person 9", score: Math.floor(Math.random() * 100), rating: 0, storeId: Math.floor(Math.random() * 5) + 1 },
+        { id: 14, name: "Random Person 10", score: Math.floor(Math.random() * 100), rating: 0, storeId: Math.floor(Math.random() * 5) + 1 },
       ],
       stores: [
         { id: 1, name: "Downtown Store", vector: "path/to/vector02.svg" },
@@ -31,6 +44,19 @@ export default {
         { id: 5, name: "Eastside Store", vector: "path/to/vector06.svg" },
       ],
     };
+  },
+  methods: {
+    calculateRating(score) {
+      return (score / 20).toFixed(2); 
+    },
+    initializeRatings() {
+      this.employees.forEach(employee => {
+        employee.rating = this.calculateRating(employee.score);
+      });
+    },
+  },
+  created() {
+    this.initializeRatings();
   },
 };
 </script>
