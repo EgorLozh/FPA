@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar">
-    <div class="logo">Logo</div>
+    <div class="logo">ScriptTracker</div>
     <ul class="nav-links">
       <li><router-link to="/dashboard">Dashboard</router-link></li>
       <li><router-link to="/">Home</router-link></li>

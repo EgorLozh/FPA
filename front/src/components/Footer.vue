@@ -1,6 +1,6 @@
 <template>
     <footer class="footer">
-      <p>&copy; 2024 My Dashboard App</p>
+      <p>&copy; 2024 ScriptTracker</p>
     </footer>
   </template>
   

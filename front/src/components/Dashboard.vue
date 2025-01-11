@@ -1,6 +1,7 @@
 <template>
   <section class="dashboard">
     <!-- Поиск магазинов -->
+    <h2>Store Rankings</h2>
     <div class="search-bar">
       <input 
         type="text" 
@@ -9,7 +10,6 @@
         @input="filterStores" 
       />
     </div>
-    <h2>Store Rankings</h2>
     <StoreList 
       :stores="filteredStores" 
       @selectStore="selectStore"
