@@ -1,0 +1,76 @@
+<template>
+  <div class="dashboard-container">
+    <Dashboard
+     :stores="storesWithEmployees" 
+     :employees="employees">
+    </Dashboard>
+  </div>
+</template>
+
+<script>
+import Dashboard from "@/components/Dashboard.vue";
+
+export default {
+  name: "DashboardView",
+  components: { Dashboard },
+  props: {
+    employees: Array,
+    stores: Array,
+  },
+  computed: {
+    storesWithEmployees() {
+      return this.stores.map(store => {
+        return {
+          ...store,
+          employees: this.employees.filter(employee => employee.storeId === store.id)
+        };
+      });
+    }
+  }
+};
+</script>
+
+<style>
+.dashboard-container {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: opacity 0.5s;
+}
+
+.dashboard-container-enter-active, .dashboard-container-leave-active {
+  transition: opacity 0.5s;
+}
+
+.dashboard-container-enter, .dashboard-container-leave-to {
+  opacity: 0;
+}
+
+.menu-list {
+  display: flex;
+  gap: 16px;
+  list-style: none;
+  padding: 0;
+}
+
+.btn-primary {
+  background-color: #2193f2;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background-color: #e8edf4;
+  color: #0c141c;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+</style>
