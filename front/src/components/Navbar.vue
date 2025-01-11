@@ -31,7 +31,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 15px 30px; /* Increased padding */
   background-color: var(--vt-c-white);
   color: var(--vt-c-black);
   position: sticky;
@@ -42,7 +42,7 @@ export default {
 .nav-links {
   list-style: none;
   display: flex;
-  gap: 20px;
+  gap: 30px; /* Increased gap between links */
   flex-grow: 1;
   justify-content: center;
 }
@@ -50,10 +50,12 @@ export default {
 .nav-links a {
   color: var(--vt-c-black);
   text-decoration: none;
+  font-size: 18px; /* Increased font size */
 }
 
 .logo {
   flex-grow: 1;
+  font-size: 24px; /* Increased font size */
 }
 
 .actions {
@@ -63,11 +65,17 @@ export default {
 }
 
 .actions button {
-  margin-left: 10px;
-  padding: 5px 10px;
+  margin-left: 15px; /* Increased margin */
+  padding: 10px 15px; /* Increased padding */
   background-color: var(--vt-c-white-soft);
   color: var(--vt-c-black);
   border: none;
   cursor: pointer;
+  font-size: 16px; /* Increased font size */
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.actions button:active {
+  transform: scale(0.95);
 }
 </style>

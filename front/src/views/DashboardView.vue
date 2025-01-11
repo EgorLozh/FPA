@@ -1,7 +1,8 @@
 <template>
   <div class="dashboard-container">
     <Dashboard
-     :stores="storesWithEmployees" :employees="employees">
+     :stores="storesWithEmployees" 
+     :employees="employees">
     </Dashboard>
   </div>
 </template>
@@ -37,6 +38,15 @@ export default {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  transition: opacity 0.5s;
+}
+
+.dashboard-container-enter-active, .dashboard-container-leave-active {
+  transition: opacity 0.5s;
+}
+
+.dashboard-container-enter, .dashboard-container-leave-to {
+  opacity: 0;
 }
 
 .menu-list {

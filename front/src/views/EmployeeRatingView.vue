@@ -17,7 +17,7 @@
         {{ sortOrder === 'asc' ? 'Ascending' : 'Descending' }}
       </button>
     </div>
-    <ul class="employee-list">
+    <transition-group name="fade" tag="ul" class="employee-list">
       <li v-for="(employee, index) in filteredEmployees" :key="employee.id">
         <span>{{ index + 1 }}</span>
         <EmployeeCard
@@ -28,7 +28,7 @@
           :storeName="getStoreName(employee)"
         />
       </li>
-    </ul>
+    </transition-group>
   </section>
 </template>
 
@@ -135,6 +135,10 @@ export default {
   border-radius: 5px;
   margin-left: 10px;
   cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+.employee-search button:active {
+  transform: scale(0.95);
 }
 
 .employee-list li {
@@ -146,5 +150,12 @@ export default {
 .employee-list li span {
   margin-right: 10px;
   font-weight: bold;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 </style>
