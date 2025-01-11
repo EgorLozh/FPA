@@ -14,28 +14,7 @@
       :stores="filteredStores" 
       @selectStore="selectStore"
     />
-    <div class="overall-rating">
-      <h3>Overall Employee Rating: {{ overallRating }}</h3>
-    </div>
-    <div class="employee-search">
-      <input 
-        type="text" 
-        v-model="employeeSearchQuery" 
-        placeholder="Search employees..." 
-        @input="filterEmployees" 
-      />
-    </div>
-    <ul class="employee-list">
-      <EmployeeCard
-        v-for="employee in filteredEmployees"
-        :key="employee.id"
-        :name="employee.name"
-        :score="employee.score"
-        :rating="employee.rating"
-        :avatar="employee.avatar"
-        :storeName="employee.storeName"
-      />
-    </ul>
+    <!-- Удалены overall-rating и employee-search секции -->
   </section>
 </template>
 
@@ -54,18 +33,11 @@ export default {
       searchQuery: "", // Поиск по магазинам
       filteredStores: this.stores,
       selectedStore: null,
-      employeeSearchQuery: "",
-      filteredEmployees: this.getAllEmployees(),
+      // Удалены employeeSearchQuery и filteredEmployees
     };
   },
   computed: {
-    overallRating() {
-      const totalRating = this.stores.reduce((sum, store) => {
-        return sum + store.employees.reduce((storeSum, employee) => storeSum + employee.rating, 0);
-      }, 0);
-      const totalEmployees = this.stores.reduce((sum, store) => sum + store.employees.length, 0);
-      return (totalEmployees > 0) ? (totalRating / totalEmployees).toFixed(2) : "N/A";
-    },
+    // Удален overallRating
   },
   methods: {
     filterStores() {
@@ -77,18 +49,7 @@ export default {
     selectStore(store) {
       this.selectedStore = store;
     },
-    getAllEmployees() {
-      return this.stores.flatMap(store => store.employees.map(employee => ({
-        ...employee,
-        storeName: store.name,
-      })));
-    },
-    filterEmployees() {
-      const query = this.employeeSearchQuery.toLowerCase();
-      this.filteredEmployees = this.getAllEmployees().filter(employee =>
-        employee.name.toLowerCase().includes(query)
-      );
-    },
+    // Удалены getAllEmployees и filterEmployees
   },
 };
 </script>
@@ -118,21 +79,9 @@ export default {
   border-radius: 5px;
 }
 
-.overall-rating {
-  text-align: center;
-  margin: 20px 0;
+.employee-card {
+  margin-bottom: 20px; /* Add this line to add space between employee cards */
 }
 
-.employee-search {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.employee-search input {
-  width: 80%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
+/* Удалены стили для overall-rating и employee-search */
 </style>
