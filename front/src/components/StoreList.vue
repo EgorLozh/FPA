@@ -6,9 +6,18 @@
         :key="store.id" 
         class="store-card"
       >
-        <details @toggle="handleSelectStore(store)">
+        <details @toggle="handleToggle(store)">
           <summary>{{ store.name }}</summary>
-          <ul class="employee-list">
+        </details>
+        <transition 
+          name="slide-fade" 
+          @before-enter="handleBeforeEnter" 
+          @enter="handleEnter" 
+          @leave="handleLeave" 
+          @after-enter="handleAfterEnter(store)" 
+          @after-leave="handleAfterLeave(store)"
+        >
+          <ul v-if="store.open" class="employee-list">
             <EmployeeCard
               v-for="employee in store.employees"
               :key="employee.id"
@@ -19,7 +28,7 @@
               :storeName="store.name"
             />
           </ul>
-        </details>
+        </transition>
       </li>
     </ul>
   </div>
@@ -37,8 +46,26 @@ export default {
     },
   },
   methods: {
-    handleSelectStore(store) {
-      this.$emit("selectStore", store);
+    handleToggle(store) {
+      store.open = !store.open;
+      this.$emit("toggleStore", store);
+    },
+    handleBeforeEnter(el) {
+      console.log('Before enter:', el);
+    },
+    handleEnter(el, done) {
+      console.log('Enter:', el);
+      done();
+    },
+    handleLeave(el, done) {
+      console.log('Leave:', el);
+      done();
+    },
+    handleAfterEnter(store) {
+      this.$emit("afterEnter", store);
+    },
+    handleAfterLeave(store) {
+      this.$emit("afterLeave", store);
     },
   },
 };
@@ -76,5 +103,17 @@ export default {
   list-style: none;
   padding: 0;
   margin-top: 10px;
+  position: relative;
+}
+
+.slide-fade-enter-active {
+  transition: all 0.5s ease;
+}
+.slide-fade-leave-active {
+  transition: all 0.5s ease;
+}
+.slide-fade-enter, .slide-fade-leave-to {
+  transform: translateY(-10px);
+  opacity: 0;
 }
 </style>

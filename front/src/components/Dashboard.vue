@@ -10,11 +10,12 @@
         @input="filterStores" 
       />
     </div>
-    <StoreList 
-      :stores="filteredStores" 
-      @selectStore="selectStore"
-    />
-    <!-- Удалены overall-rating и employee-search секции -->
+    <transition-group name="fade" tag="div">
+      <StoreList 
+        :stores="filteredStores" 
+        @selectStore="selectStore"
+      />
+    </transition-group>
   </section>
 </template>
 
@@ -33,11 +34,9 @@ export default {
       searchQuery: "", // Поиск по магазинам
       filteredStores: this.stores,
       selectedStore: null,
-      // Удалены employeeSearchQuery и filteredEmployees
     };
   },
   computed: {
-    // Удален overallRating
   },
   methods: {
     filterStores() {
@@ -49,7 +48,6 @@ export default {
     selectStore(store) {
       this.selectedStore = store;
     },
-    // Удалены getAllEmployees и filterEmployees
   },
 };
 </script>
@@ -83,5 +81,10 @@ export default {
   margin-bottom: 20px; /* Add this line to add space between employee cards */
 }
 
-/* Удалены стили для overall-rating и employee-search */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
 </style>

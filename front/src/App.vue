@@ -1,12 +1,20 @@
 <template>
   <div class="app-container">
     <Navbar />
-    <div class="main-content">
+    <transition 
+      name="page-fade" 
+      mode="out-in"
+      @before-enter="beforeEnter"
+      @enter="enter"
+      @leave="leave"
+    >
       <router-view
-       :employees="employees" 
-       :stores="stores" 
-       :calculateRating="calculateRating" />
-    </div>
+        :employees="employees" 
+        :stores="stores" 
+        :calculateRating="calculateRating"
+        class="main-content"
+      />
+    </transition>
     <Footer />
   </div>
 </template>
@@ -54,6 +62,27 @@ export default {
         employee.rating = this.calculateRating(employee.score);
       });
     },
+    beforeEnter(el) {
+      el.style.opacity = 0;
+      el.style.transform = 'translateY(10px)';
+    },
+    enter(el, done) {
+      const delay = el.dataset.index * 100;
+      setTimeout(() => {
+        el.style.transition = 'opacity 0.5s, transform 0.5s';
+        el.style.opacity = 1;
+        el.style.transform = 'translateY(0)';
+        done();
+      }, delay);
+    },
+    leave(el, done) {
+      el.style.transition = 'opacity 0.5s, transform 0.5s';
+      el.style.opacity = 0;
+      el.style.transform = 'translateY(10px)';
+      setTimeout(() => {
+        done();
+      }, 500);
+    },
   },
   created() {
     this.initializeRatings();
@@ -75,6 +104,8 @@ export default {
   flex: 1;
   width: 100%;
   padding: 16px;
+  position: relative; /* Ensure correct positioning */
+  display: block; /* Ensure block display for animation */
 }
 
 .menu-list {
@@ -100,5 +131,31 @@ export default {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.page-fade-enter-active, .page-fade-leave-active {
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+.page-fade-enter, .page-fade-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.page-fade-leave-active {
+  position: absolute;
+  width: 100%;
+}
+
+.page-fade-enter-active {
+  position: absolute;
+  width: 100%;
 }
 </style>
