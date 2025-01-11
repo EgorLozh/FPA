@@ -1,5 +1,6 @@
 <template>
   <section class="employee-rating">
+    <h2>Employee Ratings</h2>
     <div class="employee-search">
       <input 
         type="text" 
@@ -7,6 +8,11 @@
         placeholder="Search employees..." 
         @input="filterEmployees" 
       />
+      <select v-model="sortKey" @change="sortEmployees">
+        <option value="name">Name</option>
+        <option value="score">Score</option>
+        <option value="storeName">Store</option>
+      </select>
     </div>
     <ul class="employee-list">
       <EmployeeCard
@@ -14,7 +20,7 @@
         :key="employee.id"
         :name="employee.name"
         :score="employee.score"
-        :rating="employee.rating"
+        :rating="calculateRating(employee.score)"
         :avatar="employee.avatar"
         :storeName="employee.storeName"
       />
@@ -34,10 +40,21 @@ export default {
     return {
       employeeSearchQuery: "",
       filteredEmployees: [],
+      sortKey: "name",
     };
   },
   mounted() {
-    this.filteredEmployees = this.employees;
+    this.filteredEmployees = this.employees || [];
+    this.sortEmployees();
+  },
+  watch: {
+    employees: {
+      immediate: true,
+      handler(newEmployees) {
+        this.filteredEmployees = newEmployees || [];
+        this.sortEmployees();
+      }
+    }
   },
   methods: {
     filterEmployees() {
@@ -45,6 +62,21 @@ export default {
       this.filteredEmployees = this.employees.filter(employee =>
         employee.name.toLowerCase().includes(query)
       );
+      this.sortEmployees();
+    },
+    sortEmployees() {
+      this.filteredEmployees.sort((a, b) => {
+        if (this.sortKey === "score") {
+          return b.score - a.score;
+        } else if (this.sortKey === "storeName") {
+          return a.storeName.localeCompare(b.storeName);
+        } else {
+          return a.name.localeCompare(b.name);
+        }
+      });
+    },
+    calculateRating(score) {
+      return (score / 20).toFixed(2); // Example calculation
     },
   },
 };
@@ -67,9 +99,17 @@ export default {
 }
 
 .employee-search input {
-  width: 80%;
+  width: 60%;
   padding: 8px;
   border: 1px solid #ddd;
   border-radius: 5px;
+}
+
+.employee-search select {
+  width: 20%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-left: 10px;
 }
 </style>

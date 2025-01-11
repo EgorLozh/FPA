@@ -1,11 +1,13 @@
 <template>
   <li class="employee-card">
     <img :src="avatar || defaultAvatar" :alt="`Avatar of ${name || 'Unnamed Employee'}`" />
-    <div>
+    <div class="employee-details">
       <h4>{{ name || "Unnamed Employee" }}</h4>
-      <p>Score: {{ score ?? "N/A" }}</p>
-      <p>Rating: {{ rating ?? "N/A" }}</p>
-      <p v-if="storeName">Store: {{ storeName }}</p>
+      <div class="employee-stats">
+        <p>Score: {{ score ?? "N/A" }}</p>
+        <p>Rating: {{ rating ?? "N/A" }}</p>
+        <p v-if="storeName">Store: {{ storeName }}</p>
+      </div>
     </div>
   </li>
 </template>
@@ -59,12 +61,22 @@ export default {
   object-fit: cover; /* Подгонка изображения для предотвращения искажений */
 }
 
-.employee-card div h4 {
+.employee-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.employee-details h4 {
   margin: 0;
   font-size: 16px;
 }
 
-.employee-card div p {
+.employee-stats {
+  display: flex;
+  gap: 10px;
+}
+
+.employee-stats p {
   margin: 0;
   font-size: 14px;
   color: #555;

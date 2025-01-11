@@ -2,7 +2,7 @@
   <div class="app-container">
     <Navbar />
     <div class="main-content">
-      <router-view />
+      <router-view :employees="employees" :stores="stores" />
     </div>
     <Footer />
   </div>
@@ -14,7 +14,24 @@ import Footer from "@/components/Footer.vue";
 
 export default {
   name: "App",
-  components: { Navbar, Footer }
+  components: { Navbar, Footer },
+  data() {
+    return {
+      employees: [
+        { id: 1, name: "Bob Smith", score: 92, rating: 9, storeId: 1 },
+        { id: 2, name: "Jane Doe", score: 98, rating: 10, storeId: 1 },
+        { id: 3, name: "John Johnson", score: 80, rating: 8, storeId: 2 },
+        { id: 4, name: "Alice Brown", score: 85, rating: 8, storeId: 3 },
+      ],
+      stores: [
+        { id: 1, name: "Downtown Store", vector: "path/to/vector02.svg" },
+        { id: 2, name: "Uptown Store", vector: "path/to/vector03.svg" },
+        { id: 3, name: "Midtown Store", vector: "path/to/vector04.svg" },
+        { id: 4, name: "Westside Store", vector: "path/to/vector05.svg" },
+        { id: 5, name: "Eastside Store", vector: "path/to/vector06.svg" },
+      ],
+    };
+  },
 };
 </script>
 
