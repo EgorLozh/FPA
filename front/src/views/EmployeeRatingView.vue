@@ -33,8 +33,11 @@ export default {
   data() {
     return {
       employeeSearchQuery: "",
-      filteredEmployees: this.employees,
+      filteredEmployees: [],
     };
+  },
+  mounted() {
+    this.filteredEmployees = this.employees;
   },
   methods: {
     filterEmployees() {
