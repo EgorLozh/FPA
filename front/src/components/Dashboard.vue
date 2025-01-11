@@ -95,7 +95,8 @@ export default {
 
 <style>
 .dashboard {
-  max-width: 80%;
+  max-width: 100%; /* Change this to a larger value */
+  width: 90%; /* Add this line to set a specific width */
   padding: 20px;
   background: #fff;
   border-radius: 10px;

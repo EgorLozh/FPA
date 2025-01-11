@@ -2,9 +2,9 @@
   <nav class="navbar">
     <div class="logo">Logo</div>
     <ul class="nav-links">
-      <li><router-link to="/">Dashboard</router-link></li>
+      <li><router-link to="/dashboard">Dashboard</router-link></li>
+      <li><router-link to="/">Home</router-link></li>
       <li><router-link to="/employee-rating">Employee Rating</router-link></li>
-      <li><router-link to="#">Unnamed</router-link></li>
     </ul>
     <div class="actions">
       <button @click="login">Login</button>
