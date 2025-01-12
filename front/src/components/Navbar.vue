@@ -35,7 +35,7 @@ export default {
       console.log('Login clicked');
     },
     newMessage() {
-      console.log('New Message clicked');
+      this.$router.push('/new-report');
     },
     updateLinkRefs(el, index) {
       if (el) this.linkRefs[index] = el;

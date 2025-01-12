@@ -1,13 +1,11 @@
 <template>
   <section class="dashboard">
-    <!-- Поиск магазинов -->
     <h2>Store Rankings</h2>
-    <div class="search-bar">
-      <input 
-        type="text" 
-        v-model="searchQuery" 
-        placeholder="Search stores..." 
-        @input="filterStores" 
+    <div class="search-section">
+      <SearchInput
+        v-model="searchQuery"
+        placeholder="Search stores by name..."
+        @input="filterStores"
       />
     </div>
     <transition-group name="fade" tag="div">
@@ -20,11 +18,16 @@
 </template>
 
 <script>
+import SearchInput from './SearchInput.vue';
 import StoreList from './StoreList.vue';
 import EmployeeCard from './EmployeeCard.vue';
 
 export default {
-  components: { StoreList, EmployeeCard },
+  components: { 
+    SearchInput,
+    StoreList, 
+    EmployeeCard 
+  },
   props: {
     stores: Array,
     employees: Array,
@@ -63,6 +66,7 @@ export default {
   margin: 0 auto; /* Центрирование дашборда */
 }
 
+/* Удалить старые стили поиска, так как они больше не нужны */
 .search-bar {
   max-width: 100%;
   display: flex;
@@ -75,6 +79,12 @@ export default {
   margin-bottom: 20px;
   border: 1px solid #ddd;
   border-radius: 5px;
+}
+
+.search-section {
+  max-width: 800px;
+  margin: 0 auto 20px;
+  padding: 0 20px;
 }
 
 .employee-card {

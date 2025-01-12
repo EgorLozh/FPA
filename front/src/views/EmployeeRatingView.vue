@@ -1,21 +1,22 @@
 <template>
   <section class="employee-rating">
     <h2>Employee Ratings</h2>
-    <div class="employee-search">
-      <input 
-        type="text" 
-        v-model="employeeSearchQuery" 
-        placeholder="Search employees..." 
-        @input="filterEmployees" 
+    <div class="search-section">
+      <SearchInput
+        v-model="employeeSearchQuery"
+        placeholder="Search employees by name..."
+        @input="filterEmployees"
       />
-      <select v-model="sortKey" @change="sortEmployees">
-        <option value="name">Name</option>
-        <option value="score">Score</option>
-        <option value="storeName">Store</option>
-      </select>
-      <button @click="toggleSortOrder" class="button">
-        {{ sortOrder === 'asc' ? 'Ascending' : 'Descending' }}
-      </button>
+      <div class="sort-controls">
+        <select v-model="sortKey" @change="sortEmployees" class="button">
+          <option value="name">Name</option>
+          <option value="score">Score</option>
+          <option value="storeName">Store</option>
+        </select>
+        <button @click="toggleSortOrder" class="button">
+          {{ sortOrder === 'asc' ? 'Ascending' : 'Descending' }}
+        </button>
+      </div>
     </div>
     <transition-group name="fade" tag="ul" class="employee-list">
       <li v-for="(employee, index) in filteredEmployees" :key="employee.id">
@@ -34,10 +35,14 @@
 </template>
 
 <script>
-import EmployeeCard from '@/components/EmployeeCard.vue';
+import SearchInput from '@/components/SearchInput.vue'
+import EmployeeCard from '@/components/EmployeeCard.vue'
 
 export default {
-  components: { EmployeeCard },
+  components: { 
+    SearchInput,
+    EmployeeCard 
+  },
   props: {
     employees: Array,
     stores: Array,
@@ -106,6 +111,18 @@ export default {
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin: 0 auto;
+}
+
+.search-section {
+  max-width: 800px;
+  margin: 0 auto 20px;
+  padding: 0 20px;
+}
+
+.sort-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .employee-search {

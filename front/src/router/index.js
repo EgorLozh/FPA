@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import DashboardView from '@/views/DashboardView.vue';
 import EmployeeRatingView from '@/views/EmployeeRatingView.vue';
 import Home from '@/views/Home.vue';
+import NewReportView from '@/views/NewReportView.vue';
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     name: 'Employee',
     component: () => import('@/components/EmployeeDetails.vue'),
     props: route => ({ id: Number(route.params.id) })
+  },
+  {
+    path: '/new-report',
+    name: 'NewReport',
+    component: NewReportView
   }
 ];
 
