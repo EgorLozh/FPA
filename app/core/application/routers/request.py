@@ -3,7 +3,7 @@ from ninja import Router
 from core.logic.container import get_container
 from  core.logic.mediator import Mediator
 from core.domain.events.report import CreateRequest
-from core.application.schemas.request import CreateRequestSchema, ResponseRequestSchema
+from core.application.schemas.request import CreateRequestSchema, ResponseRequestSchema, ScriptActionSchema
 
 
 request_router = Router()
@@ -20,6 +20,10 @@ def create_request(request, request_data: CreateRequestSchema):
     request, *_ = mediator.handle(event)
     response = ResponseRequestSchema(
         id=request.id,
+        actions=[ScriptActionSchema(id=script_action.id, 
+                                    text=script_action.text, 
+                                    weight=script_action.weight) 
+                                    for script_action in request.script.actions],
         video_url=request.video_url,
         script_id=request.script.id,
         worker_id=request.worker.id

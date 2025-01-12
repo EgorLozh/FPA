@@ -4,6 +4,7 @@ from core.application.routers.workers import worker_router
 from core.application.routers.department import department_router
 from core.application.routers.script import script_router
 from core.application.routers.request import request_router
+from core.application.routers.report import report_router
 
 def get_api() -> NinjaAPI:
     api = NinjaAPI(title='API', version='1.0.0')
@@ -12,5 +13,6 @@ def get_api() -> NinjaAPI:
     api.add_router('department', department_router, tags=['Departments'])
     api.add_router('script', script_router, tags=['Scripts'])
     api.add_router('request', request_router, tags=['Requests'])
+    api.add_router('report', report_router, tags=['Reports'])
 
     return api
