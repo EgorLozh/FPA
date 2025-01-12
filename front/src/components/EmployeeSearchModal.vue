@@ -1,49 +1,51 @@
 <template>
-  <div v-if="show" class="modal-overlay" @click="close">
-    <div class="modal-content" @click.stop>
-      <div class="modal-header">
-        <h3>Select Employee</h3>
-        <button class="close-button" @click="close">&times;</button>
-      </div>
-      
-      <div class="search-controls">
-        <SearchInput
-          v-model="searchQuery"
-          placeholder="Search employees..."
-          @input="filterEmployees"
-        />
-        <div class="sort-controls">
-          <select v-model="sortKey" @change="sortEmployees" class="button">
-            <option value="name">Name</option>
-            <option value="score">Score</option>
-            <option value="storeName">Store</option>
-          </select>
-          <button @click="toggleSortOrder" class="button">
-            {{ sortOrder === 'asc' ? 'Ascending' : 'Descending' }}
-          </button>
+  <transition name="modal-fade">
+    <div v-if="show" class="modal-overlay" @click="close">
+      <div class="modal-content" @click.stop>
+        <div class="modal-header">
+          <h3>Select Employee</h3>
+          <button class="close-button" @click="close">&times;</button>
         </div>
-      </div>
+        
+        <div class="search-controls">
+          <SearchInput
+            v-model="searchQuery"
+            placeholder="Search employees..."
+            @input="filterEmployees"
+          />
+          <div class="sort-controls">
+            <select v-model="sortKey" @change="sortEmployees" class="button">
+              <option value="name">Name</option>
+              <option value="score">Score</option>
+              <option value="storeName">Store</option>
+            </select>
+            <button @click="toggleSortOrder" class="button">
+              {{ sortOrder === 'asc' ? 'Ascending' : 'Descending' }}
+            </button>
+          </div>
+        </div>
 
-      <div class="employees-list">
-        <div v-for="employee in filteredEmployees" 
-             :key="employee.id" 
-             class="employee-item"
-             @click="selectEmployee(employee)">
-          <div class="avatar-container" 
-               :class="{ 'no-image': !employee.avatar }"
-               :style="{ background: !employee.avatar ? generateGradient(employee.id) : null }">
-            <img v-if="employee.avatar" :src="employee.avatar" :alt="employee.name" />
-            <div v-else class="initials">{{ getInitials(employee.name) }}</div>
+        <div class="employees-list">
+          <div v-for="employee in filteredEmployees" 
+               :key="employee.id" 
+               class="employee-item"
+               @click="selectEmployee(employee)">
+            <div class="avatar-container" 
+                 :class="{ 'no-image': !employee.avatar }"
+                 :style="{ background: !employee.avatar ? generateGradient(employee.id) : null }">
+              <img v-if="employee.avatar" :src="employee.avatar" :alt="employee.name" />
+              <div v-else class="initials">{{ getInitials(employee.name) }}</div>
+            </div>
+            <div class="employee-info">
+              <div class="employee-name">{{ employee.name }}</div>
+              <div class="employee-store">{{ getStoreName(employee) }}</div>
+            </div>
+            <div class="employee-score">Score: {{ employee.score }}</div>
           </div>
-          <div class="employee-info">
-            <div class="employee-name">{{ employee.name }}</div>
-            <div class="employee-store">{{ getStoreName(employee) }}</div>
-          </div>
-          <div class="employee-score">Score: {{ employee.score }}</div>
         </div>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -146,7 +148,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -161,6 +163,7 @@ export default {
   max-height: 80vh;
   display: flex;
   flex-direction: column;
+  transform-origin: top;
 }
 
 .modal-header {
@@ -277,5 +280,23 @@ select.button {
 
 select.button:hover {
   background-color: #f5f5f5;
+}
+
+/* Transition classes */
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.modal-fade-enter-from,
+.modal-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.modal-fade-enter-to,
+.modal-fade-leave-from {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>

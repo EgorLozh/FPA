@@ -3,6 +3,7 @@ import DashboardView from '@/views/DashboardView.vue';
 import EmployeeRatingView from '@/views/EmployeeRatingView.vue';
 import Home from '@/views/Home.vue';
 import NewReportView from '@/views/NewReportView.vue';
+import LoginPage from '@/views/LoginPage.vue';
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
     path: '/new-report',
     name: 'NewReport',
     component: NewReportView
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: LoginPage
   }
 ];
 

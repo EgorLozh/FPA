@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     login() {
-      console.log('Login clicked');
+      this.$router.push('/login');
     },
     newMessage() {
       this.$router.push('/new-report');
