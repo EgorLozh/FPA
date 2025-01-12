@@ -1,6 +1,8 @@
 <template>
   <div class="app-container">
     <Navbar />
+    <div v-if="loading" class="loading">Loading...</div>
+    <div v-if="error" class="error">{{ error }}</div>
     <transition 
       name="page-fade" 
       mode="out-in"
@@ -10,7 +12,8 @@
     >
       <router-view
         :employees="employees" 
-        :stores="stores" 
+        :stores="stores"
+        :loading="loading"
         class="main-content"
       />
     </transition>
@@ -19,6 +22,7 @@
 </template>
 
 <script>
+import { api } from '@/services/api';
 import Navbar from "@/components/Navbar.vue";
 import Footer from "@/components/Footer.vue";
 import EmployeeDetails from "@/components/EmployeeDetails.vue";
@@ -28,32 +32,34 @@ export default {
   components: { Navbar, Footer, EmployeeDetails },
   data() {
     return {
-      employees: [
-        { id: 1, name: "Bob Smith", score: 92, reportsCount: 15, storeId: 1 },
-        { id: 2, name: "Jane Doe", score: 98, reportsCount: 23, storeId: 1 },
-        { id: 3, name: "John Johnson", score: 80, reportsCount: 8, storeId: 2 },
-        { id: 4, name: "Alice Brown", score: 85, reportsCount: 12, storeId: 3 },
-        { id: 5, name: "Michael Wilson", score: Math.floor(Math.random() * 100), reportsCount: Math.floor(Math.random() * 30), storeId: Math.floor(Math.random() * 5) + 1 },
-        { id: 6, name: "Sarah Davis", score: Math.floor(Math.random() * 100), reportsCount: Math.floor(Math.random() * 30), storeId: Math.floor(Math.random() * 5) + 1 },
-        { id: 7, name: "David Martinez", score: Math.floor(Math.random() * 100), reportsCount: Math.floor(Math.random() * 30), storeId: Math.floor(Math.random() * 5) + 1 },
-        { id: 8, name: "Emily Taylor", score: Math.floor(Math.random() * 100), reportsCount: Math.floor(Math.random() * 30), storeId: Math.floor(Math.random() * 5) + 1 },
-        { id: 9, name: "James Anderson", score: Math.floor(Math.random() * 100), reportsCount: Math.floor(Math.random() * 30), storeId: Math.floor(Math.random() * 5) + 1 },
-        { id: 10, name: "Lisa Thompson", score: Math.floor(Math.random() * 100), reportsCount: Math.floor(Math.random() * 30), storeId: Math.floor(Math.random() * 5) + 1 },
-        { id: 11, name: "Robert Garcia", score: Math.floor(Math.random() * 100), reportsCount: Math.floor(Math.random() * 30), storeId: Math.floor(Math.random() * 5) + 1 },
-        { id: 12, name: "Emma White", score: Math.floor(Math.random() * 100), reportsCount: Math.floor(Math.random() * 30), storeId: Math.floor(Math.random() * 5) + 1 },
-        { id: 13, name: "William Lee", score: Math.floor(Math.random() * 100), reportsCount: Math.floor(Math.random() * 30), storeId: Math.floor(Math.random() * 5) + 1 },
-        { id: 14, name: "Olivia Clark", score: Math.floor(Math.random() * 100), reportsCount: Math.floor(Math.random() * 30), storeId: Math.floor(Math.random() * 5) + 1 },
-      ],
-      stores: [
-        { id: 1, name: "Downtown Store", vector: "path/to/vector02.svg" },
-        { id: 2, name: "Uptown Store", vector: "path/to/vector03.svg" },
-        { id: 3, name: "Midtown Store", vector: "path/to/vector04.svg" },
-        { id: 4, name: "Westside Store", vector: "path/to/vector05.svg" },
-        { id: 5, name: "Eastside Store", vector: "path/to/vector06.svg" },
-      ],
+      employees: [],
+      stores: [],
+      loading: false,
+      error: null
     };
   },
+  async created() {
+    await this.fetchData();
+  },
   methods: {
+    async fetchData() {
+      this.loading = true;
+      this.error = null;
+      try {
+        // Загружаем данные параллельно
+        const [employeesData, storesData] = await Promise.all([
+          api.getEmployees(),
+          api.getStores()
+        ]);
+        this.employees = employeesData;
+        this.stores = storesData;
+      } catch (err) {
+        this.error = "Error loading data: " + err.message;
+        console.error("API Error:", err);
+      } finally {
+        this.loading = false;
+      }
+    },
     beforeEnter(el) {
       el.style.opacity = 0;
       el.style.transform = 'translateY(10px)';
@@ -150,5 +156,21 @@ export default {
 .page-fade-enter-active {
   position: absolute;
   width: 100%;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+  font-size: 1.2em;
+  color: #2193f2;
+}
+
+.error {
+  text-align: center;
+  padding: 20px;
+  color: red;
+  background-color: #ffebee;
+  margin: 10px;
+  border-radius: 4px;
 }
 </style>
