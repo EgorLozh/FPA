@@ -1,11 +1,16 @@
 <template>
   <li class="employee-card" @click="goToEmployeePage">
-    <img :src="avatar || defaultAvatar" :alt="`Avatar of ${name || 'Unnamed Employee'}`" />
+    <div class="avatar-container" 
+         :class="{ 'no-image': !avatar }"
+         :style="{ background: !avatar ? generateGradient : null }">
+      <img v-if="avatar" :src="avatar" :alt="`${name || 'Unnamed Employee'}`" />
+      <div v-else class="initials">{{ getInitials }}</div>
+    </div>
     <div class="employee-details">
       <h4>{{ name || "Unnamed Employee" }}</h4>
       <div class="employee-stats">
         <p>Score: {{ score ?? "N/A" }}</p>
-        <p>Rating: {{ rating ?? "N/A" }}</p>
+        <p>Reports: {{ reportsCount ?? 0 }}</p>
         <p v-if="storeName">Store: {{ storeName }}</p>
       </div>
     </div>
@@ -27,9 +32,9 @@ export default {
       type: Number,
       default: null,
     },
-    rating: {
+    reportsCount: {
       type: Number,
-      default: null,
+      default: 0,
     },
     avatar: {
       type: String,
@@ -44,6 +49,23 @@ export default {
     defaultAvatar() {
       return "path/to/default-avatar.jpg"; // Укажите путь к изображению по умолчанию
     },
+    getInitials() {
+      if (!this.name) return '?';
+      return this.name
+        .split(' ')
+        .map(word => word[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2);
+    },
+    generateGradient() {
+      const hue = (this.id * 137.508) % 360; // золотое сечение для равномерного распределения
+      const saturation = 65; // не слишком яркий
+      const lightness = 65; // не слишком тёмный
+      const color1 = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+      const color2 = `hsl(${(hue + 40) % 360}, ${saturation}%, ${lightness}%)`;
+      return `linear-gradient(45deg, ${color1}, ${color2})`;
+    }
   },
   methods: {
     goToEmployeePage() {
@@ -69,11 +91,31 @@ export default {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-.employee-card img {
+.avatar-container {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  object-fit: cover; /* Подгонка изображения для предотвращения искажений */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e0e0e0;
+}
+
+.avatar-container.no-image {
+  background-color: unset; /* Убираем фиксированный цвет фона */
+}
+
+.initials {
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.employee-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .employee-details {

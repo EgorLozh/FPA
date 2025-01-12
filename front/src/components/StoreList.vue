@@ -24,7 +24,7 @@
               :id="employee.id"
               :name="employee.name"
               :score="employee.score"
-              :rating="employee.rating"
+              :reportsCount="employee.reportsCount"
               :avatar="employee.avatar"
               :storeName="store.name"
             />

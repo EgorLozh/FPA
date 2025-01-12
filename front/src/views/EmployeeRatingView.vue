@@ -24,7 +24,7 @@
           :id="employee.id"
           :name="employee.name"
           :score="employee.score"
-          :rating="calculateRating(employee.score)"
+          :reportsCount="employee.reportsCount"
           :avatar="employee.avatar"
           :storeName="getStoreName(employee)"
         />
@@ -41,7 +41,6 @@ export default {
   props: {
     employees: Array,
     stores: Array,
-    calculateRating: Function,
   },
   data() {
     return {

@@ -11,7 +11,6 @@
       <router-view
         :employees="employees" 
         :stores="stores" 
-        :calculateRating="calculateRating"
         class="main-content"
       />
     </transition>
@@ -30,20 +29,20 @@ export default {
   data() {
     return {
       employees: [
-        { id: 1, name: "Bob Smith", score: 92, rating: 0, storeId: 1 },
-        { id: 2, name: "Jane Doe", score: 98, rating: 0, storeId: 1 },
-        { id: 3, name: "John Johnson", score: 80, rating: 0, storeId: 2 },
-        { id: 4, name: "Alice Brown", score: 85, rating: 0, storeId: 3 },
-        { id: 5, name: "Random Person 1", score: Math.floor(Math.random() * 100), rating: 0, storeId: Math.floor(Math.random() * 5) + 1 },
-        { id: 6, name: "Random Person 2", score: Math.floor(Math.random() * 100), rating: 0, storeId: Math.floor(Math.random() * 5) + 1 },
-        { id: 7, name: "Random Person 3", score: Math.floor(Math.random() * 100), rating: 0, storeId: Math.floor(Math.random() * 5) + 1 },
-        { id: 8, name: "Random Person 4", score: Math.floor(Math.random() * 100), rating: 0, storeId: Math.floor(Math.random() * 5) + 1 },
-        { id: 9, name: "Random Person 5", score: Math.floor(Math.random() * 100), rating: 0, storeId: Math.floor(Math.random() * 5) + 1 },
-        { id: 10, name: "Random Person 6", score: Math.floor(Math.random() * 100), rating: 0, storeId: Math.floor(Math.random() * 5) + 1 },
-        { id: 11, name: "Random Person 7", score: Math.floor(Math.random() * 100), rating: 0, storeId: Math.floor(Math.random() * 5) + 1 },
-        { id: 12, name: "Random Person 8", score: Math.floor(Math.random() * 100), rating: 0, storeId: Math.floor(Math.random() * 5) + 1 },
-        { id: 13, name: "Random Person 9", score: Math.floor(Math.random() * 100), rating: 0, storeId: Math.floor(Math.random() * 5) + 1 },
-        { id: 14, name: "Random Person 10", score: Math.floor(Math.random() * 100), rating: 0, storeId: Math.floor(Math.random() * 5) + 1 },
+        { id: 1, name: "Bob Smith", score: 92, reportsCount: 15, storeId: 1 },
+        { id: 2, name: "Jane Doe", score: 98, reportsCount: 23, storeId: 1 },
+        { id: 3, name: "John Johnson", score: 80, reportsCount: 8, storeId: 2 },
+        { id: 4, name: "Alice Brown", score: 85, reportsCount: 12, storeId: 3 },
+        { id: 5, name: "Michael Wilson", score: Math.floor(Math.random() * 100), reportsCount: Math.floor(Math.random() * 30), storeId: Math.floor(Math.random() * 5) + 1 },
+        { id: 6, name: "Sarah Davis", score: Math.floor(Math.random() * 100), reportsCount: Math.floor(Math.random() * 30), storeId: Math.floor(Math.random() * 5) + 1 },
+        { id: 7, name: "David Martinez", score: Math.floor(Math.random() * 100), reportsCount: Math.floor(Math.random() * 30), storeId: Math.floor(Math.random() * 5) + 1 },
+        { id: 8, name: "Emily Taylor", score: Math.floor(Math.random() * 100), reportsCount: Math.floor(Math.random() * 30), storeId: Math.floor(Math.random() * 5) + 1 },
+        { id: 9, name: "James Anderson", score: Math.floor(Math.random() * 100), reportsCount: Math.floor(Math.random() * 30), storeId: Math.floor(Math.random() * 5) + 1 },
+        { id: 10, name: "Lisa Thompson", score: Math.floor(Math.random() * 100), reportsCount: Math.floor(Math.random() * 30), storeId: Math.floor(Math.random() * 5) + 1 },
+        { id: 11, name: "Robert Garcia", score: Math.floor(Math.random() * 100), reportsCount: Math.floor(Math.random() * 30), storeId: Math.floor(Math.random() * 5) + 1 },
+        { id: 12, name: "Emma White", score: Math.floor(Math.random() * 100), reportsCount: Math.floor(Math.random() * 30), storeId: Math.floor(Math.random() * 5) + 1 },
+        { id: 13, name: "William Lee", score: Math.floor(Math.random() * 100), reportsCount: Math.floor(Math.random() * 30), storeId: Math.floor(Math.random() * 5) + 1 },
+        { id: 14, name: "Olivia Clark", score: Math.floor(Math.random() * 100), reportsCount: Math.floor(Math.random() * 30), storeId: Math.floor(Math.random() * 5) + 1 },
       ],
       stores: [
         { id: 1, name: "Downtown Store", vector: "path/to/vector02.svg" },
@@ -55,14 +54,6 @@ export default {
     };
   },
   methods: {
-    calculateRating(score) {
-      return (score / 20).toFixed(2); 
-    },
-    initializeRatings() {
-      this.employees.forEach(employee => {
-        employee.rating = this.calculateRating(employee.score);
-      });
-    },
     beforeEnter(el) {
       el.style.opacity = 0;
       el.style.transform = 'translateY(10px)';
@@ -84,9 +75,6 @@ export default {
         done();
       }, 500);
     },
-  },
-  created() {
-    this.initializeRatings();
   },
 };
 </script>
@@ -124,11 +112,18 @@ export default {
   border-radius: 4px;
   cursor: pointer;
   margin: 10px;
-  transition: background-color 0.3s, transform 0.3s;
+  transition: all 0.3s ease;
+}
+
+.button:hover {
+  background-color: #1976d2;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(33, 147, 242, 0.3);
 }
 
 .button:active {
-  transform: scale(0.95);
+  transform: scale(0.95) translateY(0);
+  box-shadow: 0 1px 4px rgba(33, 147, 242, 0.2);
 }
 
 .fade-enter-active, .fade-leave-active {
