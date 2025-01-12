@@ -73,4 +73,19 @@ export default {
   border-radius: 4px;
   cursor: pointer;
 }
+
+.button {
+  background-color: #2193f2;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 10px;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.button:active {
+  transform: scale(0.95);
+}
 </style>

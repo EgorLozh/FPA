@@ -87,6 +87,12 @@ export default {
   border: 1px solid #ddd;
   border-radius: 5px;
   background: #fff;
+  transition: box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.store-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .store-card details {

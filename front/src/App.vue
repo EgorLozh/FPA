@@ -115,22 +115,19 @@ export default {
   padding: 0;
 }
 
-.btn-primary {
+.button {
   background-color: #2193f2;
   color: #fff;
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  margin: 10px;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
-.btn-secondary {
-  background-color: #e8edf4;
-  color: #0c141c;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.button:active {
+  transform: scale(0.95);
 }
 
 .fade-enter-active, .fade-leave-active {

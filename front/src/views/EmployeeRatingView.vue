@@ -13,7 +13,7 @@
         <option value="score">Score</option>
         <option value="storeName">Store</option>
       </select>
-      <button @click="toggleSortOrder">
+      <button @click="toggleSortOrder" class="button">
         {{ sortOrder === 'asc' ? 'Ascending' : 'Descending' }}
       </button>
     </div>
