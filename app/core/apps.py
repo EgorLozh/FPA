@@ -11,3 +11,4 @@ class CoreConfig(AppConfig):
         from core.infra.models.script import ScriptAction
         from core.infra.models.worker import Worker
         from core.infra.models.mark import Mark
+        from core.infra.models.video import Video
