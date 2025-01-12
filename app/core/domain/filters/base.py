@@ -1,6 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
 class BaseFilter:
-    id: int | None = None
+    id: int | None = field(kw_only=True)
