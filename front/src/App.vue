@@ -22,10 +22,11 @@
 <script>
 import Navbar from "@/components/Navbar.vue";
 import Footer from "@/components/Footer.vue";
+import EmployeeDetails from "@/components/EmployeeDetails.vue";
 
 export default {
   name: "App",
-  components: { Navbar, Footer },
+  components: { Navbar, Footer, EmployeeDetails },
   data() {
     return {
       employees: [

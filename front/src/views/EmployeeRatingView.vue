@@ -21,6 +21,7 @@
       <li v-for="(employee, index) in filteredEmployees" :key="employee.id">
         <span>{{ index + 1 }}</span>
         <EmployeeCard
+          :id="employee.id"
           :name="employee.name"
           :score="employee.score"
           :rating="calculateRating(employee.score)"

@@ -18,6 +18,12 @@ const routes = [
     path: '/employee-rating',
     name: 'EmployeeRating',
     component: EmployeeRatingView
+  },
+  {
+    path: '/employee/:id',
+    name: 'Employee',
+    component: () => import('@/components/EmployeeDetails.vue'),
+    props: route => ({ id: Number(route.params.id) })
   }
 ];
 

@@ -1,5 +1,5 @@
 <template>
-  <li class="employee-card">
+  <li class="employee-card" @click="goToEmployeePage">
     <img :src="avatar || defaultAvatar" :alt="`Avatar of ${name || 'Unnamed Employee'}`" />
     <div class="employee-details">
       <h4>{{ name || "Unnamed Employee" }}</h4>
@@ -15,6 +15,10 @@
 <script>
 export default {
   props: {
+    id: {
+      type: Number,
+      required: true
+    },
     name: {
       type: String,
       default: "Unnamed Employee",
@@ -41,6 +45,11 @@ export default {
       return "path/to/default-avatar.jpg"; // Укажите путь к изображению по умолчанию
     },
   },
+  methods: {
+    goToEmployeePage() {
+      this.$router.push({ name: 'Employee', params: { id: this.id } });
+    }
+  }
 };
 </script>
 

@@ -21,6 +21,7 @@
             <EmployeeCard
               v-for="employee in store.employees"
               :key="employee.id"
+              :id="employee.id"
               :name="employee.name"
               :score="employee.score"
               :rating="employee.rating"
