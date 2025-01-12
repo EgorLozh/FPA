@@ -25,7 +25,11 @@ const routes = [
     path: '/employee/:id',
     name: 'Employee',
     component: () => import('@/components/EmployeeDetails.vue'),
-    props: route => ({ id: Number(route.params.id) })
+    props: route => ({ 
+      id: Number(route.params.id),
+      workers: route.params.workers,
+      departments: route.params.departments
+    })
   },
   {
     path: '/new-report',

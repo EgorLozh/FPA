@@ -11,7 +11,7 @@
       <div class="employee-stats">
         <p>Score: {{ score ?? "N/A" }}</p>
         <p>Reports: {{ reportsCount ?? 0 }}</p>
-        <p v-if="storeName">Store: {{ storeName }}</p>
+        <p v-if="departmentName">Store: {{ departmentName }}</p>
       </div>
     </div>
   </li>
@@ -28,7 +28,7 @@ export default {
       type: String,
       default: "Unnamed Employee",
     },
-    score: {
+    score: { // Переименовать в rating если апи возвращает rating
       type: Number,
       default: null,
     },
@@ -40,7 +40,7 @@ export default {
       type: String,
       default: "",
     },
-    storeName: {
+    departmentName: { // Было storeName
       type: String,
       default: "",
     },

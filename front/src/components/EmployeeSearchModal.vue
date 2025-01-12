@@ -101,11 +101,11 @@ export default {
       this.filteredEmployees.sort((a, b) => {
         let result;
         if (this.sortKey === "score") {
-          result = b.score - a.score;
-        } else if (this.sortKey === "storeName") {
-          const storeA = this.getStoreName(a);
-          const storeB = this.getStoreName(b);
-          result = storeA.localeCompare(storeB);
+          result = b.rating - a.rating; // Изменено с score на rating
+        } else if (this.sortKey === "departmentName") { // Было storeName
+          const deptA = this.getDepartmentName(a);
+          const deptB = this.getDepartmentName(b);
+          result = deptA.localeCompare(deptB);
         } else {
           result = a.name.localeCompare(b.name);
         }
@@ -116,9 +116,9 @@ export default {
       this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
       this.sortEmployees();
     },
-    getStoreName(employee) {
-      const store = this.stores.find(store => store.id === employee.storeId);
-      return store ? store.name : 'Unknown Store';
+    getDepartmentName(worker) { // Было getStoreName
+      const department = this.departments.find(dept => dept.id === worker.departmentId);
+      return department ? department.name : 'Unknown Department';
     },
     getInitials(name) {
       if (!name) return '?';

@@ -2,3 +2,21 @@
 venv/
 __pycache__/
 front/node_modules/public-encrypt/test/test_rsa_privkey.pem
+
+# Generated files
+*.js.map
+_metadata.json
+
+# Node modules and libraries
+front/node_modules/
+front/node_modules/**/*.js
+front/node_modules/**/*.map
+
+# Generated chunks
+*chunk-*.js
+*chunk-*.js.map
+
+# Library files
+front/node_modules/axios/
+front/node_modules/vue/
+front/node_modules/vue-router/

@@ -44,8 +44,8 @@ export default {
     EmployeeCard 
   },
   props: {
-    employees: Array,
-    stores: Array,
+    workers: Array,
+    departments: Array,
   },
   data() {
     return {
@@ -56,14 +56,14 @@ export default {
     };
   },
   mounted() {
-    this.filteredEmployees = this.employees || [];
+    this.filteredEmployees = this.workers || [];
     this.sortEmployees();
   },
   watch: {
-    employees: {
+    workers: {
       immediate: true,
-      handler(newEmployees) {
-        this.filteredEmployees = newEmployees || [];
+      handler(newWorkers) {
+        this.filteredEmployees = newWorkers || [];
         this.sortEmployees();
       }
     }
@@ -71,8 +71,8 @@ export default {
   methods: {
     filterEmployees() {
       const query = this.employeeSearchQuery.toLowerCase();
-      this.filteredEmployees = this.employees.filter(employee =>
-        employee.name.toLowerCase().includes(query)
+      this.filteredEmployees = this.workers.filter(worker =>
+        worker.name.toLowerCase().includes(query)
       );
       this.sortEmployees();
     },
@@ -80,11 +80,11 @@ export default {
       this.filteredEmployees.sort((a, b) => {
         let result;
         if (this.sortKey === "score") {
-          result = b.score - a.score;
+          result = b.rating - a.rating; // Changed from score to rating
         } else if (this.sortKey === "storeName") {
-          const storeA = this.getStoreName(a);
-          const storeB = this.getStoreName(b);
-          result = storeA.localeCompare(storeB);
+          const deptA = this.getDepartmentName(a);
+          const deptB = this.getDepartmentName(b);
+          result = deptA.localeCompare(deptB);
         } else {
           result = a.name.localeCompare(b.name);
         }
@@ -95,9 +95,9 @@ export default {
       this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
       this.sortEmployees();
     },
-    getStoreName(employee) {
-      const store = this.stores.find(store => store.id === employee.storeId);
-      return store ? store.name : 'Unknown Store';
+    getDepartmentName(worker) {
+      const department = this.departments.find(dept => dept.id === worker.departmentId);
+      return department ? department.name : 'Unknown Department';
     },
   },
 };

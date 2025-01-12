@@ -50,6 +50,11 @@ export default {
       const store = this.$root.$data.stores.find(store => store.id === this.employee.storeId);
       return store ? store.name : null;
     },
+    departmentName() {
+      if (!this.employee) return null;
+      const dept = this.$root.$data.departments.find(dept => dept.id === this.employee.departmentId);
+      return dept ? dept.name : null;
+    },
     getInitials() {
       if (!this.employee?.name) return '?';
       return this.employee.name
@@ -69,13 +74,13 @@ export default {
     }
   },
   created() {
-    this.employee = this.$root.$data.employees.find(emp => emp.id === this.id);
+    this.employee = this.$root.$data.workers.find(worker => worker.id === this.id);
   },
   watch: {
     id: {
       immediate: true,
       handler(newId) {
-        this.employee = this.$root.$data.employees.find(emp => emp.id === newId);
+        this.employee = this.$root.$data.workers.find(worker => worker.id === newId);
       }
     }
   }

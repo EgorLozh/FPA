@@ -1,8 +1,8 @@
 <template>
   <div class="dashboard-container">
     <Dashboard
-     :stores="storesWithEmployees" 
-     :employees="employees">
+     :departments="departments" 
+     :workers="workers">
     </Dashboard>
   </div>
 </template>

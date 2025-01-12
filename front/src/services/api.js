@@ -1,40 +1,42 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/api'; // Замените на ваш базовый URL API
+const API_URL = 'http://localhost:8000/api';
 
 export const api = {
-    // Получение списка сотрудников
-    async getEmployees() {
-        const response = await axios.get(`${API_URL}/employees`);
+    // Workers
+    async getWorkers() {
+        const response = await fetch('/api/workers');
+        if (!response.ok) throw new Error('Failed to fetch workers');
+        return response.json();
+    },
+    
+    async getWorkerById(id) {
+        const response = await axios.get(`${API_URL}/worker/${id}`);
         return response.data;
     },
 
-    // Получение списка магазинов
-    async getStores() {
-        const response = await axios.get(`${API_URL}/stores`);
+    // Departments
+    async getDepartments() {
+        const response = await fetch('/api/departments');
+        if (!response.ok) throw new Error('Failed to fetch departments');
+        return response.json();
+    },
+
+    // Scripts
+    async getScripts() {
+        const response = await axios.get(`${API_URL}/script`);
         return response.data;
     },
 
-    // Получение конкретного сотрудника по ID
-    async getEmployeeById(id) {
-        const response = await axios.get(`${API_URL}/employees/${id}`);
+    // Reports
+    async getReports() {
+        const response = await axios.get(`${API_URL}/report`);
         return response.data;
     },
 
-    // Добавление нового сотрудника
-    async createEmployee(employeeData) {
-        const response = await axios.post(`${API_URL}/employees`, employeeData);
+    // Requests
+    async getRequests() {
+        const response = await axios.get(`${API_URL}/request`);
         return response.data;
     },
-
-    // Обновление данных сотрудника
-    async updateEmployee(id, employeeData) {
-        const response = await axios.put(`${API_URL}/employees/${id}`, employeeData);
-        return response.data;
-    },
-
-    // Удаление сотрудника
-    async deleteEmployee(id) {
-        await axios.delete(`${API_URL}/employees/${id}`);
-    }
 };

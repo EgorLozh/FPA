@@ -3,16 +3,10 @@
     <Navbar />
     <div v-if="loading" class="loading">Loading...</div>
     <div v-if="error" class="error">{{ error }}</div>
-    <transition 
-      name="page-fade" 
-      mode="out-in"
-      @before-enter="beforeEnter"
-      @enter="enter"
-      @leave="leave"
-    >
+    <transition name="page-fade" mode="out-in">
       <router-view
-        :employees="employees" 
-        :stores="stores"
+        :workers="workers"
+        :departments="departments"
         :loading="loading"
         class="main-content"
       />
@@ -32,8 +26,11 @@ export default {
   components: { Navbar, Footer, EmployeeDetails },
   data() {
     return {
-      employees: [],
-      stores: [],
+      workers: [],
+      departments: [],
+      scripts: [],
+      reports: [],
+      requests: [],
       loading: false,
       error: null
     };
@@ -46,13 +43,17 @@ export default {
       this.loading = true;
       this.error = null;
       try {
-        // Загружаем данные параллельно
-        const [employeesData, storesData] = await Promise.all([
-          api.getEmployees(),
-          api.getStores()
+        const [workersData, departmentsData] = await Promise.all([
+          api.getWorkers(),
+          api.getDepartments()
         ]);
-        this.employees = employeesData;
-        this.stores = storesData;
+
+        // Добавляем workers в departments
+        this.departments = departmentsData.map(dept => ({
+          ...dept,
+          workers: workersData.filter(worker => worker.departmentId === dept.id)
+        }));
+        this.workers = workersData;
       } catch (err) {
         this.error = "Error loading data: " + err.message;
         console.error("API Error:", err);

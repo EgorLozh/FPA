@@ -1,17 +1,17 @@
 <template>
   <section class="dashboard">
-    <h2>Store Rankings</h2>
+    <h2>Department Rankings</h2>
     <div class="search-section">
       <SearchInput
         v-model="searchQuery"
-        placeholder="Search stores by name..."
-        @input="filterStores"
+        placeholder="Search departments by name..."
+        @input="filterDepartments"
       />
     </div>
     <transition-group name="fade" tag="div">
-      <StoreList 
-        :stores="filteredStores" 
-        @selectStore="selectStore"
+      <DepartmentList 
+        :departments="filteredDepartments" 
+        @selectDepartment="selectDepartment"
       />
     </transition-group>
   </section>
@@ -19,37 +19,35 @@
 
 <script>
 import SearchInput from './SearchInput.vue';
-import StoreList from './StoreList.vue';
+import DepartmentList from './DepartmentList.vue';
 import EmployeeCard from './EmployeeCard.vue';
 
 export default {
   components: { 
     SearchInput,
-    StoreList, 
+    DepartmentList, 
     EmployeeCard 
   },
   props: {
-    stores: Array,
-    employees: Array,
+    departments: Array,
+    workers: Array,
   },
   data() {
     return {
-      searchQuery: "", // Поиск по магазинам
-      filteredStores: this.stores,
-      selectedStore: null,
+      searchQuery: "",
+      filteredDepartments: this.departments,
+      selectedDepartment: null,
     };
   },
-  computed: {
-  },
   methods: {
-    filterStores() {
+    filterDepartments() {
       const query = this.searchQuery.toLowerCase();
-      this.filteredStores = this.stores.filter((store) =>
-        store.name.toLowerCase().includes(query)
+      this.filteredDepartments = this.departments.filter((department) =>
+        department.name.toLowerCase().includes(query)
       );
     },
-    selectStore(store) {
-      this.selectedStore = store;
+    selectDepartment(department) {
+      this.selectedDepartment = department;
     },
   },
 };
