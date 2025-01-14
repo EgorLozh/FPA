@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <h1>Авторизация нереализована ☹️</h1>
+    <h1>Авторизация не реализована ☹️</h1>
   </div>
 </template>
 

@@ -117,7 +117,6 @@ export default {
   width: 100%;
 }
 
-/* Новый контейнер-обертка для аватара */
 .avatar-wrapper {
   width: 500px;
   height: 500px;

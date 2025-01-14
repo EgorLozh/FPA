@@ -20,17 +20,17 @@
 <script>
 import SearchInput from './SearchInput.vue';
 import DepartmentList from './DepartmentList.vue';
-import EmployeeCard from './EmployeeCard.vue';
 
 export default {
   components: { 
     SearchInput,
     DepartmentList, 
-    EmployeeCard 
   },
   props: {
-    departments: Array,
-    workers: Array,
+    departments: { // Принимаем отделы из API
+      type: Array,
+      required: true,
+    },
   },
   data() {
     return {
@@ -38,6 +38,12 @@ export default {
       filteredDepartments: this.departments,
       selectedDepartment: null,
     };
+  },
+  watch: {
+    // Обновляем filteredDepartments при изменении departments
+    departments() {
+      this.filteredDepartments = this.departments;
+    },
   },
   methods: {
     filterDepartments() {
@@ -55,38 +61,19 @@ export default {
 
 <style>
 .dashboard {
-  max-width: 100%; /* Change this to a larger value */
-  width: 90%; /* Add this line to set a specific width */
+  max-width: 100%;
+  width: 90%;
   padding: 20px;
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin: 0 auto; /* Центрирование дашборда */
-}
-
-/* Удалить старые стили поиска, так как они больше не нужны */
-.search-bar {
-  max-width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.search-bar input {
-  width: 80%;
-  padding: 8px;
-  margin-bottom: 20px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  margin: 0 auto;
 }
 
 .search-section {
   max-width: 800px;
   margin: 0 auto 20px;
   padding: 0 20px;
-}
-
-.employee-card {
-  margin-bottom: 20px; /* Add this line to add space between employee cards */
 }
 
 .fade-enter-active, .fade-leave-active {

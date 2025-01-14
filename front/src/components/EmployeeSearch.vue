@@ -10,8 +10,6 @@
       <div class="search-options" v-if="showSortOptions">
         <select v-model="sortKey" @change="handleSort">
           <option value="name">Name</option>
-          <option value="score">Score</option>
-          <option value="storeName">Store</option>
         </select>
         <button @click="toggleSortOrder" class="sort-button">
           {{ sortOrder === 'asc' ? 'Ascending' : 'Descending' }}
@@ -24,10 +22,8 @@
            class="employee-item"
            @click="selectEmployee(employee)">
         <div class="employee-info">
-          <img :src="employee.avatar" alt="avatar" class="employee-avatar" v-if="employee.avatar">
           <span class="employee-name">{{ employee.name }}</span>
         </div>
-        <span class="employee-score" v-if="employee.score">Score: {{ employee.score }}</span>
       </div>
     </div>
   </div>
@@ -66,12 +62,7 @@ export default {
     },
     sortedEmployees() {
       return [...this.filteredEmployees].sort((a, b) => {
-        let result;
-        if (this.sortKey === 'score') {
-          result = b.score - a.score;
-        } else {
-          result = a.name.localeCompare(b.name);
-        }
+        let result = a.name.localeCompare(b.name);
         return this.sortOrder === 'asc' ? result : -result;
       })
     }
@@ -154,12 +145,6 @@ export default {
   display: flex;
   align-items: center;
   gap: 10px;
-}
-
-.employee-avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
 }
 
 .employee-score {

@@ -3,27 +3,34 @@
     <Navbar />
     <div v-if="loading" class="loading">Loading...</div>
     <div v-if="error" class="error">{{ error }}</div>
-    <transition name="page-fade" mode="out-in">
-      <router-view
-        :workers="workers"
-        :departments="departments"
-        :loading="loading"
-        class="main-content"
-      />
-    </transition>
+
+    <router-view v-slot="{ Component }">
+      <transition name="page-fade" mode="out-in">
+        <component
+          :is="Component"
+          :workers="workers"
+          :departments="departments"
+          :scripts="scripts"
+          :reports="reports"
+          :requests="requests"
+          :loading="loading"
+          class="main-content"
+        />
+      </transition>
+    </router-view>
+
     <Footer />
   </div>
 </template>
 
 <script>
-import { api } from '@/services/api';
+import { api } from "@/services/api";
 import Navbar from "@/components/Navbar.vue";
 import Footer from "@/components/Footer.vue";
-import EmployeeDetails from "@/components/EmployeeDetails.vue";
 
 export default {
   name: "App",
-  components: { Navbar, Footer, EmployeeDetails },
+  components: { Navbar, Footer },
   data() {
     return {
       workers: [],
@@ -32,7 +39,7 @@ export default {
       reports: [],
       requests: [],
       loading: false,
-      error: null
+      error: null,
     };
   },
   async created() {
@@ -43,44 +50,26 @@ export default {
       this.loading = true;
       this.error = null;
       try {
-        const [workersData, departmentsData] = await Promise.all([
+        const [workersResponse, departmentsResponse] = await Promise.all([
           api.getWorkers(),
-          api.getDepartments()
+          api.getDepartments(),
         ]);
 
-        // Добавляем workers в departments
-        this.departments = departmentsData.map(dept => ({
+        console.log('Workers Response:', workersResponse);
+        console.log('Departments Response:', departmentsResponse);
+
+        this.departments = departmentsResponse.map((dept) => ({
           ...dept,
-          workers: workersData.filter(worker => worker.departmentId === dept.id)
+          workers: workersResponse.filter((worker) => worker.department_id === dept.id),
         }));
-        this.workers = workersData;
+
+        this.workers = workersResponse;
       } catch (err) {
         this.error = "Error loading data: " + err.message;
         console.error("API Error:", err);
       } finally {
         this.loading = false;
       }
-    },
-    beforeEnter(el) {
-      el.style.opacity = 0;
-      el.style.transform = 'translateY(10px)';
-    },
-    enter(el, done) {
-      const delay = el.dataset.index * 100;
-      setTimeout(() => {
-        el.style.transition = 'opacity 0.5s, transform 0.5s';
-        el.style.opacity = 1;
-        el.style.transform = 'translateY(0)';
-        done();
-      }, delay);
-    },
-    leave(el, done) {
-      el.style.transition = 'opacity 0.5s, transform 0.5s';
-      el.style.opacity = 0;
-      el.style.transform = 'translateY(10px)';
-      setTimeout(() => {
-        done();
-      }, 500);
     },
   },
 };
@@ -100,63 +89,8 @@ export default {
   flex: 1;
   width: 100%;
   padding: 16px;
-  position: relative; /* Ensure correct positioning */
-  display: block; /* Ensure block display for animation */
-}
-
-.menu-list {
-  display: flex;
-  gap: 16px;
-  list-style: none;
-  padding: 0;
-}
-
-.button {
-  background-color: #2193f2;
-  color: #fff;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin: 10px;
-  transition: all 0.3s ease;
-}
-
-.button:hover {
-  background-color: #1976d2;
-  transform: translateY(-2px);
-  box-shadow: 0 2px 8px rgba(33, 147, 242, 0.3);
-}
-
-.button:active {
-  transform: scale(0.95) translateY(0);
-  box-shadow: 0 1px 4px rgba(33, 147, 242, 0.2);
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.5s;
-}
-.fade-enter, .fade-leave-to {
-  opacity: 0;
-}
-
-.page-fade-enter-active, .page-fade-leave-active {
-  transition: opacity 0.5s, transform 0.5s;
-}
-
-.page-fade-enter, .page-fade-leave-to {
-  opacity: 0;
-  transform: translateY(10px);
-}
-
-.page-fade-leave-active {
-  position: absolute;
-  width: 100%;
-}
-
-.page-fade-enter-active {
-  position: absolute;
-  width: 100%;
+  position: relative;
+  display: block;
 }
 
 .loading {
@@ -173,5 +107,16 @@ export default {
   background-color: #ffebee;
   margin: 10px;
   border-radius: 4px;
+}
+
+.page-fade-enter-active,
+.page-fade-leave-active {
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+.page-fade-enter,
+.page-fade-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
 }
 </style>

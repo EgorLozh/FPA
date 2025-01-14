@@ -1,6 +1,6 @@
 <template>
   <li class="employee-card" @click="goToEmployeePage">
-    <div class="avatar-container" 
+    <div class="avatar-container"
          :class="{ 'no-image': !avatar }"
          :style="{ background: !avatar ? generateGradient : null }">
       <img v-if="avatar" :src="avatar" :alt="`${name || 'Unnamed Employee'}`" />
@@ -12,6 +12,7 @@
         <p>Score: {{ score ?? "N/A" }}</p>
         <p>Reports: {{ reportsCount ?? 0 }}</p>
         <p v-if="departmentName">Store: {{ departmentName }}</p>
+        <p>Department ID: {{ departmentId }}</p> <!-- Добавлено для отображения department_id -->
       </div>
     </div>
   </li>
@@ -22,33 +23,26 @@ export default {
   props: {
     id: {
       type: Number,
-      required: true
+      required: true,
     },
     name: {
       type: String,
       default: "Unnamed Employee",
     },
-    score: { // Переименовать в rating если апи возвращает rating
+    departmentId: { // Используем department_id из API
       type: Number,
-      default: null,
-    },
-    reportsCount: {
-      type: Number,
-      default: 0,
-    },
-    avatar: {
-      type: String,
-      default: "",
-    },
-    departmentName: { // Было storeName
-      type: String,
-      default: "",
+      required: true,
     },
   },
+  data() {
+    return {
+      score: null, // По умолчанию
+      reportsCount: 0, // По умолчанию
+      avatar: "", // По умолчанию
+      departmentName: "", // По умолчанию
+    };
+  },
   computed: {
-    defaultAvatar() {
-      return "path/to/default-avatar.jpg"; // Укажите путь к изображению по умолчанию
-    },
     getInitials() {
       if (!this.name) return '?';
       return this.name
@@ -65,13 +59,25 @@ export default {
       const color1 = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
       const color2 = `hsl(${(hue + 40) % 360}, ${saturation}%, ${lightness}%)`;
       return `linear-gradient(45deg, ${color1}, ${color2})`;
-    }
+    },
   },
   methods: {
     goToEmployeePage() {
       this.$router.push({ name: 'Employee', params: { id: this.id } });
-    }
-  }
+    },
+    fetchAdditionalData() {
+      // Здесь можно добавить логику для получения дополнительных данных,
+      // таких как score, reportsCount, avatar и departmentName, если они доступны через другие API.
+      // Например:
+      // this.score = await fetchScore(this.id);
+      // this.reportsCount = await fetchReportsCount(this.id);
+      // this.avatar = await fetchAvatar(this.id);
+      // this.departmentName = await fetchDepartmentName(this.departmentId);
+    },
+  },
+  mounted() {
+    this.fetchAdditionalData(); // Загружаем дополнительные данные при монтировании компонента
+  },
 };
 </script>
 
@@ -131,6 +137,7 @@ export default {
 .employee-stats {
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .employee-stats p {

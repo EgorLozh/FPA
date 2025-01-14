@@ -16,10 +16,7 @@
               :key="worker.id"
               :id="worker.id"
               :name="worker.name"
-              :score="worker.rating"
-              :reportsCount="worker.reportsCount"
-              :avatar="worker.avatar"
-              :departmentName="department.name"
+              :department-name="department.name"
             />
           </ul>
         </transition>
@@ -30,12 +27,45 @@
 
 <script>
 export default {
-  // ...existing code...
   props: {
     departments: {
       type: Array,
       required: true,
     },
   },
+  methods: {
+    handleToggle(department) {
+      department.open = !department.open;
+    },
+  },
 };
 </script>
+
+<style>
+.department-list {
+  list-style: none;
+  padding: 0;
+}
+
+.department-card {
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.employee-list {
+  list-style: none;
+  padding-left: 20px;
+  margin-top: 10px;
+}
+
+.slide-fade-enter-active, .slide-fade-leave-active {
+  transition: all 0.3s ease;
+}
+
+.slide-fade-enter, .slide-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+</style>

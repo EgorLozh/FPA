@@ -31,8 +31,8 @@
 
     <EmployeeSearchModal
       :show="showModal"
-      :employees="$root.$data.employees"
-      :stores="$root.$data.stores"
+      :employees="employees"
+      :departments="departments"
       @close="showModal = false"
       @select="selectEmployee"
     />
@@ -47,6 +47,10 @@ export default {
   components: {
     EmployeeSearchModal
   },
+  props: {
+    employees: Array,
+    departments: Array,
+  },
   data() {
     return {
       selectedFile: null,
@@ -58,11 +62,6 @@ export default {
     }
   },
   computed: {
-    filteredEmployees() {
-      return this.$root.$data.employees.filter(emp => 
-        emp.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      )
-    },
     isFormValid() {
       return this.selectedFile && this.script && this.selectedEmployee
     }

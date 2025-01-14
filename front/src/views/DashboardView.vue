@@ -1,8 +1,8 @@
 <template>
   <div class="dashboard-container">
     <Dashboard
-     :departments="departments" 
-     :workers="workers">
+     :departments="departmentsWithEmployees" 
+     :workers="employees">
     </Dashboard>
   </div>
 </template>
@@ -15,14 +15,14 @@ export default {
   components: { Dashboard },
   props: {
     employees: Array,
-    stores: Array,
+    departments: Array, // Переименовано с stores на departments
   },
   computed: {
-    storesWithEmployees() {
-      return this.stores.map(store => {
+    departmentsWithEmployees() {
+      return this.departments.map(department => {
         return {
-          ...store,
-          employees: this.employees.filter(employee => employee.storeId === store.id)
+          ...department,
+          employees: this.employees.filter(employee => employee.departement_id === department.id)
         };
       });
     }

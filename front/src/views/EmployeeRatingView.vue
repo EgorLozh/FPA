@@ -10,8 +10,8 @@
       <div class="sort-controls">
         <select v-model="sortKey" @change="sortEmployees" class="button">
           <option value="name">Name</option>
-          <option value="score">Score</option>
-          <option value="storeName">Store</option>
+          <option value="rating">Rating</option>
+          <option value="departmentName">Department</option>
         </select>
         <button @click="toggleSortOrder" class="button">
           {{ sortOrder === 'asc' ? 'Ascending' : 'Descending' }}
@@ -24,10 +24,7 @@
         <EmployeeCard
           :id="employee.id"
           :name="employee.name"
-          :score="employee.score"
-          :reportsCount="employee.reportsCount"
-          :avatar="employee.avatar"
-          :storeName="getStoreName(employee)"
+          :department-name="getDepartmentName(employee)"
         />
       </li>
     </transition-group>
@@ -79,9 +76,9 @@ export default {
     sortEmployees() {
       this.filteredEmployees.sort((a, b) => {
         let result;
-        if (this.sortKey === "score") {
-          result = b.rating - a.rating; // Changed from score to rating
-        } else if (this.sortKey === "storeName") {
+        if (this.sortKey === "rating") {
+          result = b.rating - a.rating;
+        } else if (this.sortKey === "departmentName") {
           const deptA = this.getDepartmentName(a);
           const deptB = this.getDepartmentName(b);
           result = deptA.localeCompare(deptB);
@@ -96,7 +93,7 @@ export default {
       this.sortEmployees();
     },
     getDepartmentName(worker) {
-      const department = this.departments.find(dept => dept.id === worker.departmentId);
+      const department = this.departments.find(dept => dept.id === worker.departement_id);
       return department ? department.name : 'Unknown Department';
     },
   },

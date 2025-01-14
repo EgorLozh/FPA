@@ -16,8 +16,6 @@
           <div class="sort-controls">
             <select v-model="sortKey" @change="sortEmployees" class="button">
               <option value="name">Name</option>
-              <option value="score">Score</option>
-              <option value="storeName">Store</option>
             </select>
             <button @click="toggleSortOrder" class="button">
               {{ sortOrder === 'asc' ? 'Ascending' : 'Descending' }}
@@ -33,14 +31,12 @@
             <div class="avatar-container" 
                  :class="{ 'no-image': !employee.avatar }"
                  :style="{ background: !employee.avatar ? generateGradient(employee.id) : null }">
-              <img v-if="employee.avatar" :src="employee.avatar" :alt="employee.name" />
-              <div v-else class="initials">{{ getInitials(employee.name) }}</div>
+              <div class="initials">{{ getInitials(employee.name) }}</div>
             </div>
             <div class="employee-info">
               <div class="employee-name">{{ employee.name }}</div>
-              <div class="employee-store">{{ getStoreName(employee) }}</div>
+              <div class="employee-store">{{ getDepartmentName(employee) }}</div>
             </div>
-            <div class="employee-score">Score: {{ employee.score }}</div>
           </div>
         </div>
       </div>
@@ -57,7 +53,7 @@ export default {
   props: {
     show: Boolean,
     employees: Array,
-    stores: Array
+    departments: Array // Переименовано с stores на departments
   },
   data() {
     return {
@@ -99,16 +95,7 @@ export default {
     },
     sortEmployees() {
       this.filteredEmployees.sort((a, b) => {
-        let result;
-        if (this.sortKey === "score") {
-          result = b.rating - a.rating; // Изменено с score на rating
-        } else if (this.sortKey === "departmentName") { // Было storeName
-          const deptA = this.getDepartmentName(a);
-          const deptB = this.getDepartmentName(b);
-          result = deptA.localeCompare(deptB);
-        } else {
-          result = a.name.localeCompare(b.name);
-        }
+        let result = a.name.localeCompare(b.name);
         return this.sortOrder === 'asc' ? result : -result;
       });
     },
@@ -116,8 +103,8 @@ export default {
       this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
       this.sortEmployees();
     },
-    getDepartmentName(worker) { // Было getStoreName
-      const department = this.departments.find(dept => dept.id === worker.departmentId);
+    getDepartmentName(employee) {
+      const department = this.departments.find(dept => dept.id === employee.departement_id);
       return department ? department.name : 'Unknown Department';
     },
     getInitials(name) {
