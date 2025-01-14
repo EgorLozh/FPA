@@ -12,3 +12,5 @@ class CoreConfig(AppConfig):
         from core.infra.models.worker import Worker
         from core.infra.models.mark import Mark
         from core.infra.models.video import Video
+        from core.infra.models.request import Request
+        from core.infra.models.report import Report

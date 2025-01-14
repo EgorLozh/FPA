@@ -6,7 +6,7 @@ from core.domain.filters.worker import WorkerFilter
 @dataclass
 class CreateWorkerEvent(BaseEvent):
     name: str
-    department_id: int
+    department_id: int | None = None
 
 
 @dataclass
@@ -16,4 +16,4 @@ class GetWorkersEvent(BaseEvent):
 
 @dataclass
 class GetWorkerStatisticsEvent(BaseEvent):
-    worker_filter: WorkerFilter
+    worker_id: int

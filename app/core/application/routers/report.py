@@ -1,6 +1,6 @@
 from ninja import Router
 
-from core.domain.events.report import GetReport
+from core.domain.events.report import GetReportEvent
 from core.domain.filters.report import ReportFilter
 from core.logic.container import get_container
 from core.logic.mediator import Mediator
@@ -14,7 +14,7 @@ def get_report(request, filter_data: ReportFilterSchema = None):
     container = get_container()
     mediator: Mediator = container.resolve(Mediator)
     filter = ReportFilter(request_id=filter_data.request_id)
-    event = GetReport(report_filter=filter)
+    event = GetReportEvent(report_filter=filter)
     report, *_ = mediator.handle(event)
     response = ResponseReportSchema(id=report.id, 
                                     marks=[MarkSchema(script_action_id=mark.script_action.id, 
