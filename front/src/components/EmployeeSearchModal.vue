@@ -25,14 +25,14 @@
 
         <div class="workers-list">
           <template v-if="filteredWorkers.length > 0">
-            <EmployeeCard
-              v-for="worker in filteredWorkers"
-              :key="worker.id"
-              :id="worker.id"
-              :name="worker.name"
-              :departmentId="worker.department_id"
-              @click="selectWorker(worker)"
-            />
+            <div v-for="worker in filteredWorkers" :key="worker.id" class="worker-item">
+              <EmployeeCard
+                :id="worker.id"
+                :name="worker.name"
+                :departmentId="worker.department_id"
+              />
+              <button class="select-button" @click="selectWorker(worker)">Select</button>
+            </div>
           </template>
           <div v-else class="no-results">No workers found.</div>
         </div>
@@ -50,7 +50,7 @@ export default {
   components: { SearchInput, EmployeeCard },
   props: {
     show: Boolean,
-    workers: { // Исправлено на workers
+    workers: {
       type: Array,
       default: () => [],
     },
@@ -64,25 +64,24 @@ export default {
       searchQuery: "",
       sortKey: "name",
       sortOrder: "asc",
-      filteredWorkers: [], // Исправлено на workers
+      filteredWorkers: [],
     };
   },
   watch: {
     show(newVal) {
       if (newVal) {
-        this.filteredWorkers = [...this.workers]; // Исправлено на workers
-        this.sortWorkers(); // Исправлено на workers
+        this.filteredWorkers = [...this.workers];
+        this.sortWorkers();
       }
     },
-    workers: { // Исправлено на workers
+    workers: {
       immediate: true,
-      handler(newWorkers) { // Исправлено на workers
-        console.log("Workers:", newWorkers);
+      handler(newWorkers) {
         if (Array.isArray(newWorkers)) {
-          this.filteredWorkers = [...newWorkers]; // Исправлено на workers
-          this.sortWorkers(); // Исправлено на workers
+          this.filteredWorkers = [...newWorkers];
+          this.sortWorkers();
         } else {
-          this.filteredWorkers = []; // Исправлено на workers
+          this.filteredWorkers = [];
         }
       },
     },
@@ -91,26 +90,26 @@ export default {
     close() {
       this.$emit("close");
     },
-    selectWorker(worker) { // Исправлено на workers
+    selectWorker(worker) {
       this.$emit("select", worker);
       this.close();
     },
-    filterWorkers() { // Исправлено на workers
+    filterWorkers() {
       const query = this.searchQuery.toLowerCase();
-      this.filteredWorkers = this.workers.filter((worker) => // Исправлено на workers
+      this.filteredWorkers = this.workers.filter((worker) =>
         worker.name.toLowerCase().includes(query)
       );
-      this.sortWorkers(); // Исправлено на workers
+      this.sortWorkers();
     },
-    sortWorkers() { // Исправлено на workers
-      this.filteredWorkers.sort((a, b) => { // Исправлено на workers
+    sortWorkers() {
+      this.filteredWorkers.sort((a, b) => {
         let result = a.name.localeCompare(b.name);
         return this.sortOrder === "asc" ? result : -result;
       });
     },
     toggleSortOrder() {
       this.sortOrder = this.sortOrder === "asc" ? "desc" : "asc";
-      this.sortWorkers(); // Исправлено на workers
+      this.sortWorkers();
     },
   },
 };
@@ -159,6 +158,14 @@ export default {
 .search-controls {
   padding: 15px;
   border-bottom: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.search-controls .search-input {
+  width: 100%; /* Ограничиваем ширину SearchInput */
+  max-width: 100%; /* Убедимся, что он не выходит за пределы */
 }
 
 .sort-controls {
@@ -170,6 +177,30 @@ export default {
 .workers-list {
   overflow-y: auto;
   padding: 15px;
+}
+
+.worker-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+}
+
+.select-button {
+  background-color: #2193f2;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.select-button:hover {
+  background-color: #1976d2;
 }
 
 .no-results {
