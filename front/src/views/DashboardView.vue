@@ -1,9 +1,9 @@
 <template>
   <div class="dashboard-container">
     <Dashboard
-     :departments="departmentsWithEmployees" 
-     :workers="employees">
-    </Dashboard>
+      :departments="departmentsWithEmployees"
+      :workers="workers"
+    />
   </div>
 </template>
 
@@ -14,31 +14,28 @@ export default {
   name: "DashboardView",
   components: { Dashboard },
   props: {
-    employees: {
+    workers: {
       type: Array,
       required: true,
-      default: () => [], // Инициализируем пустым массивом по умолчанию
+      default: () => [],
     },
     departments: {
       type: Array,
       required: true,
-      default: () => [], // Инициализируем пустым массивом по умолчанию
+      default: () => [],
     },
   },
   computed: {
     departmentsWithEmployees() {
-      // Проверяем, что departments и employees не undefined
       const departments = this.departments || [];
-      const employees = this.employees || [];
+      const workers = this.workers || [];
 
-      return departments.map((department) => {
-        return {
-          ...department,
-          employees: employees.filter(
-            (employee) => employee.department_id === department.id // Исправлено на department_id
-          ),
-        };
-      });
+      return departments.map((department) => ({
+        ...department,
+        employees: workers.filter(
+          (worker) => worker.department_id === department.id
+        ),
+      }));
     },
   },
 };

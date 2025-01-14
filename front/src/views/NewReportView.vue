@@ -31,7 +31,7 @@
 
     <EmployeeSearchModal
       :show="showModal"
-      :employees="employees"
+      :workers="workers" 
       :departments="departments"
       @close="showModal = false"
       @select="selectEmployee"
@@ -48,7 +48,7 @@ export default {
     EmployeeSearchModal
   },
   props: {
-    employees: Array,
+    workers: Array, // Исправлено на workers
     departments: Array,
   },
   data() {

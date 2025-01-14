@@ -47,56 +47,60 @@ export default {
   },
   methods: {
     createPlaceholderData() {
-    const placeholderDepartment = {
-      id: 1,
-      name: 'Placeholder Department',
-    };
+      const placeholderDepartment = {
+        id: 1,
+        name: 'Placeholder Department',
+        workers: [], // Добавляем пустой массив для работников
+      };
 
-    const placeholderWorker = {
-      id: 1,
-      name: 'Placeholder Worker',
-      department_id: 1,
-    };
+      const placeholderWorker = {
+        id: 1,
+        name: 'Placeholder Worker',
+        department_id: 1,
+      };
 
-    this.departments = [placeholderDepartment];
-    this.workers = [placeholderWorker];
+      // Добавляем работника в отдел
+      placeholderDepartment.workers.push(placeholderWorker);
+
+      this.departments = [placeholderDepartment];
+      this.workers = [placeholderWorker];
+    },
+
+    async fetchData() {
+      this.loading = true;
+      this.error = null;
+      try {
+        const [workersResponse, departmentsResponse] = await Promise.all([
+          api.getWorkers(),
+          api.getDepartments(),
+        ]);
+
+        console.log('Workers Response:', workersResponse);
+        console.log('Departments Response:', departmentsResponse);
+
+        // Если массивы пусты, создаем placeholder-данные
+        if (workersResponse.length === 0 && departmentsResponse.length === 0) {
+          this.createPlaceholderData();
+        } else {
+          // Если данные есть, используем их
+          this.departments = departmentsResponse.map((dept) => ({
+            ...dept,
+            workers: workersResponse.filter((worker) => worker.department_id === dept.id),
+          }));
+
+          this.workers = workersResponse;
+        }
+      } catch (err) {
+        this.error = "Error loading data: " + err.message;
+        console.error("API Error:", err);
+
+        // Если произошла ошибка, создаем placeholder-данные
+        this.createPlaceholderData();
+      } finally {
+        this.loading = false;
+      }
+    },
   },
-
-  async fetchData() {
-  this.loading = true;
-  this.error = null;
-  try {
-    const [workersResponse, departmentsResponse] = await Promise.all([
-      api.getWorkers(),
-      api.getDepartments(),
-    ]);
-
-    console.log('Workers Response:', workersResponse);
-    console.log('Departments Response:', departmentsResponse);
-
-    // Если массивы пусты, создаем placeholder-данные
-    if (workersResponse.length === 0 && departmentsResponse.length === 0) {
-      this.createPlaceholderData();
-    } else {
-      // Если данные есть, используем их
-      this.departments = departmentsResponse.map((dept) => ({
-        ...dept,
-        workers: workersResponse.filter((worker) => worker.department_id === dept.id),
-      }));
-
-      this.workers = workersResponse;
-    }
-  } catch (err) {
-    this.error = "Error loading data: " + err.message;
-    console.error("API Error:", err);
-
-    // Если произошла ошибка, создаем placeholder-данные
-    this.createPlaceholderData();
-  } finally {
-    this.loading = false;
-  }
-},
-},
 };
 </script>
 

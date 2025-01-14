@@ -11,8 +11,8 @@
       <div class="employee-stats">
         <p>Score: {{ score ?? "N/A" }}</p>
         <p>Reports: {{ reportsCount ?? 0 }}</p>
-        <p v-if="departmentName">Store: {{ departmentName }}</p>
-        <p>Department ID: {{ departmentId }}</p> <!-- Добавлено для отображения department_id -->
+        <p v-if="storeName">Store: {{ storeName }}</p>
+        <p>Department ID: {{ departmentId }}</p>
       </div>
     </div>
   </li>
@@ -29,17 +29,20 @@ export default {
       type: String,
       default: "Unnamed Employee",
     },
-    departmentId: { // Используем department_id из API
+    departmentId: {
       type: Number,
       required: true,
+    },
+    departments: { // Добавляем пропс для списка отделов
+      type: Array,
+      default: () => [],
     },
   },
   data() {
     return {
-      score: null, // По умолчанию
-      reportsCount: 0, // По умолчанию
-      avatar: "", // По умолчанию
-      departmentName: "", // По умолчанию
+      score: null,
+      reportsCount: 0,
+      avatar: "",
     };
   },
   computed: {
@@ -53,12 +56,16 @@ export default {
         .slice(0, 2);
     },
     generateGradient() {
-      const hue = (this.id * 137.508) % 360; // золотое сечение для равномерного распределения
-      const saturation = 65; // не слишком яркий
-      const lightness = 65; // не слишком тёмный
+      const hue = (this.id * 137.508) % 360;
+      const saturation = 65;
+      const lightness = 65;
       const color1 = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
       const color2 = `hsl(${(hue + 40) % 360}, ${saturation}%, ${lightness}%)`;
       return `linear-gradient(45deg, ${color1}, ${color2})`;
+    },
+    storeName() {
+      const department = this.departments.find(dept => dept.id === this.departmentId);
+      return department ? department.name : 'Unknown Store';
     },
   },
   methods: {
@@ -66,17 +73,11 @@ export default {
       this.$router.push({ name: 'Employee', params: { id: this.id } });
     },
     fetchAdditionalData() {
-      // Здесь можно добавить логику для получения дополнительных данных,
-      // таких как score, reportsCount, avatar и departmentName, если они доступны через другие API.
-      // Например:
-      // this.score = await fetchScore(this.id);
-      // this.reportsCount = await fetchReportsCount(this.id);
-      // this.avatar = await fetchAvatar(this.id);
-      // this.departmentName = await fetchDepartmentName(this.departmentId);
+      // Логика для получения дополнительных данных
     },
   },
   mounted() {
-    this.fetchAdditionalData(); // Загружаем дополнительные данные при монтировании компонента
+    this.fetchAdditionalData();
   },
 };
 </script>
@@ -109,7 +110,7 @@ export default {
 }
 
 .avatar-container.no-image {
-  background-color: unset; /* Убираем фиксированный цвет фона */
+  background-color: unset;
 }
 
 .initials {

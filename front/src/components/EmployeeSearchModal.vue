@@ -11,10 +11,10 @@
           <SearchInput
             v-model="searchQuery"
             placeholder="Search employees..."
-            @input="filterEmployees"
+            @input="filterWorkers"
           />
           <div class="sort-controls">
-            <select v-model="sortKey" @change="sortEmployees" class="button">
+            <select v-model="sortKey" @change="sortWorkers" class="button">
               <option value="name">Name</option>
             </select>
             <button @click="toggleSortOrder" class="button">
@@ -23,30 +23,18 @@
           </div>
         </div>
 
-        <div class="employees-list">
-          <template v-if="filteredEmployees.length > 0">
-            <div
-              v-for="employee in filteredEmployees"
-              :key="employee.id"
-              class="employee-item"
-              @click="selectEmployee(employee)"
-            >
-              <div
-                class="avatar-container"
-                :class="{ 'no-image': !employee.avatar }"
-                :style="{
-                  background: !employee.avatar ? generateGradient(employee.id) : null,
-                }"
-              >
-                <div class="initials">{{ getInitials(employee.name) }}</div>
-              </div>
-              <div class="employee-info">
-                <div class="employee-name">{{ employee.name }}</div>
-                <div class="employee-store">{{ getDepartmentName(employee) }}</div>
-              </div>
-            </div>
+        <div class="workers-list">
+          <template v-if="filteredWorkers.length > 0">
+            <EmployeeCard
+              v-for="worker in filteredWorkers"
+              :key="worker.id"
+              :id="worker.id"
+              :name="worker.name"
+              :departmentId="worker.department_id"
+              @click="selectWorker(worker)"
+            />
           </template>
-          <div v-else class="no-results">No employees found.</div>
+          <div v-else class="no-results">No workers found.</div>
         </div>
       </div>
     </div>
@@ -55,19 +43,20 @@
 
 <script>
 import SearchInput from "./SearchInput.vue";
+import EmployeeCard from "./EmployeeCard.vue";
 
 export default {
   name: "EmployeeSearchModal",
-  components: { SearchInput },
+  components: { SearchInput, EmployeeCard },
   props: {
     show: Boolean,
-    employees: {
+    workers: { // Исправлено на workers
       type: Array,
-      default: () => [], // Установка значения по умолчанию
+      default: () => [],
     },
     departments: {
       type: Array,
-      default: () => [], // Установка значения по умолчанию
+      default: () => [],
     },
   },
   data() {
@@ -75,25 +64,25 @@ export default {
       searchQuery: "",
       sortKey: "name",
       sortOrder: "asc",
-      filteredEmployees: [],
+      filteredWorkers: [], // Исправлено на workers
     };
   },
   watch: {
     show(newVal) {
       if (newVal) {
-        this.filteredEmployees = [...this.employees];
-        this.sortEmployees();
+        this.filteredWorkers = [...this.workers]; // Исправлено на workers
+        this.sortWorkers(); // Исправлено на workers
       }
     },
-    employees: {
+    workers: { // Исправлено на workers
       immediate: true,
-      handler(newEmployees) {
-        console.log("Employees:", newEmployees); // Для отладки
-        if (Array.isArray(newEmployees)) {
-          this.filteredEmployees = [...newEmployees];
-          this.sortEmployees();
+      handler(newWorkers) { // Исправлено на workers
+        console.log("Workers:", newWorkers);
+        if (Array.isArray(newWorkers)) {
+          this.filteredWorkers = [...newWorkers]; // Исправлено на workers
+          this.sortWorkers(); // Исправлено на workers
         } else {
-          this.filteredEmployees = []; // Запасной вариант
+          this.filteredWorkers = []; // Исправлено на workers
         }
       },
     },
@@ -102,49 +91,26 @@ export default {
     close() {
       this.$emit("close");
     },
-    selectEmployee(employee) {
-      this.$emit("select", employee);
+    selectWorker(worker) { // Исправлено на workers
+      this.$emit("select", worker);
       this.close();
     },
-    filterEmployees() {
+    filterWorkers() { // Исправлено на workers
       const query = this.searchQuery.toLowerCase();
-      this.filteredEmployees = this.employees.filter((employee) =>
-        employee.name.toLowerCase().includes(query)
+      this.filteredWorkers = this.workers.filter((worker) => // Исправлено на workers
+        worker.name.toLowerCase().includes(query)
       );
-      this.sortEmployees();
+      this.sortWorkers(); // Исправлено на workers
     },
-    sortEmployees() {
-      this.filteredEmployees.sort((a, b) => {
+    sortWorkers() { // Исправлено на workers
+      this.filteredWorkers.sort((a, b) => { // Исправлено на workers
         let result = a.name.localeCompare(b.name);
         return this.sortOrder === "asc" ? result : -result;
       });
     },
     toggleSortOrder() {
       this.sortOrder = this.sortOrder === "asc" ? "desc" : "asc";
-      this.sortEmployees();
-    },
-    getDepartmentName(employee) {
-      const department = this.departments.find(
-        (dept) => dept.id === employee.departement_id
-      );
-      return department ? department.name : "Unknown Department";
-    },
-    getInitials(name) {
-      if (!name) return "?";
-      return name
-        .split(" ")
-        .map((word) => word[0])
-        .join("")
-        .toUpperCase()
-        .slice(0, 2);
-    },
-    generateGradient(id) {
-      const hue = (id * 137.508) % 360;
-      const saturation = 65;
-      const lightness = 65;
-      const color1 = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-      const color2 = `hsl(${(hue + 40) % 360}, ${saturation}%, ${lightness}%)`;
-      return `linear-gradient(45deg, ${color1}, ${color2})`;
+      this.sortWorkers(); // Исправлено на workers
     },
   },
 };
@@ -201,94 +167,9 @@ export default {
   margin-top: 10px;
 }
 
-.employees-list {
+.workers-list {
   overflow-y: auto;
   padding: 15px;
-}
-
-.employee-item {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  border: 1px solid #eee;
-  margin-bottom: 8px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.employee-item:hover {
-  background-color: #f5f5f5;
-}
-
-.avatar-container {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 15px;
-}
-
-.avatar-container.no-image {
-  background-color: unset;
-}
-
-.initials {
-  color: white;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.employee-info {
-  flex-grow: 1;
-}
-
-.employee-name {
-  font-weight: bold;
-}
-
-.employee-store {
-  font-size: 0.9em;
-  color: #666;
-}
-
-.employee-score {
-  color: #2193f2;
-  font-weight: bold;
-}
-
-.button {
-  background-color: #2193f2;
-  color: #fff;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.button:hover {
-  background-color: #1976d2;
-  transform: translateY(-2px);
-  box-shadow: 0 2px 8px rgba(33, 147, 242, 0.3);
-}
-
-.button:active {
-  transform: scale(0.95) translateY(0);
-  box-shadow: 0 1px 4px rgba(33, 147, 242, 0.2);
-}
-
-select.button {
-  background-color: white;
-  color: #2193f2;
-  border: 1px solid #2193f2;
-}
-
-select.button:hover {
-  background-color: #f5f5f5;
 }
 
 .no-results {
@@ -297,7 +178,6 @@ select.button:hover {
   padding: 20px;
 }
 
-/* Transition classes */
 .modal-fade-enter-active,
 .modal-fade-leave-active {
   transition: opacity 0.3s ease, transform 0.3s ease;

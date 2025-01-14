@@ -24,7 +24,8 @@
         <EmployeeCard
           :id="employee.id"
           :name="employee.name"
-          :department-name="getDepartmentName(employee)"
+          :department-id="employee.department_id" 
+          :departments="departments" 
         />
       </li>
     </transition-group>
@@ -41,8 +42,14 @@ export default {
     EmployeeCard 
   },
   props: {
-    workers: Array,
-    departments: Array,
+    workers: {
+      type: Array,
+      default: () => [],
+    },
+    departments: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -53,14 +60,14 @@ export default {
     };
   },
   mounted() {
-    this.filteredEmployees = this.workers || [];
+    this.filteredEmployees = this.workers;
     this.sortEmployees();
   },
   watch: {
     workers: {
       immediate: true,
       handler(newWorkers) {
-        this.filteredEmployees = newWorkers || [];
+        this.filteredEmployees = newWorkers;
         this.sortEmployees();
       }
     }
@@ -77,7 +84,9 @@ export default {
       this.filteredEmployees.sort((a, b) => {
         let result;
         if (this.sortKey === "rating") {
-          result = b.rating - a.rating;
+          const ratingA = a.rating || 0;
+          const ratingB = b.rating || 0;
+          result = ratingB - ratingA;
         } else if (this.sortKey === "departmentName") {
           const deptA = this.getDepartmentName(a);
           const deptB = this.getDepartmentName(b);
@@ -93,7 +102,8 @@ export default {
       this.sortEmployees();
     },
     getDepartmentName(worker) {
-      const department = this.departments.find(dept => dept.id === worker.departement_id);
+      if (!this.departments || !worker) return 'Unknown Department';
+      const department = this.departments.find(dept => dept.id === worker.department_id);
       return department ? department.name : 'Unknown Department';
     },
   },

@@ -19,9 +19,9 @@
           <span class="label">Reports Count</span>
           <span class="value">{{ employee.reportsCount }}</span>
         </div>
-        <div class="info-item" v-if="storeName">
-          <span class="label">Store</span>
-          <span class="value">{{ storeName }}</span>
+        <div class="info-item" v-if="departmentName">
+          <span class="label">Department</span>
+          <span class="value">{{ departmentName }}</span>
         </div>
       </div>
     </div>
@@ -36,54 +36,59 @@ export default {
   props: {
     id: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
+    departments: {
+      type: Array,
+      required: true,
+      default: () => [], // Инициализируем пустым массивом по умолчанию
+    },
+    workers: {
+      type: Array,
+      required: true,
+      default: () => [], // Инициализируем пустым массивом по умолчанию
+    },
   },
   data() {
     return {
-      employee: null
+      employee: null,
     };
   },
   computed: {
-    storeName() {
-      if (!this.employee) return null;
-      const store = this.$root.$data.stores.find(store => store.id === this.employee.storeId);
-      return store ? store.name : null;
-    },
     departmentName() {
-      if (!this.employee) return null;
-      const dept = this.$root.$data.departments.find(dept => dept.id === this.employee.departmentId);
+      if (!this.employee || !this.departments) return null;
+      const dept = this.departments.find((dept) => dept.id === this.employee.departmentId);
       return dept ? dept.name : null;
     },
     getInitials() {
       if (!this.employee?.name) return '?';
       return this.employee.name
         .split(' ')
-        .map(word => word[0])
+        .map((word) => word[0])
         .join('')
         .toUpperCase()
         .slice(0, 2);
     },
     generateGradient() {
       const hue = (this.id * 137.508) % 360;
-      const saturation = 75;  // Увеличили насыщенность
-      const lightness = 60;   // Немного темнее для лучшей читаемости текста
+      const saturation = 75; // Увеличили насыщенность
+      const lightness = 60; // Немного темнее для лучшей читаемости текста
       const color1 = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
       const color2 = `hsl(${(hue + 60) % 360}, ${saturation}%, ${lightness}%)`;
       return `linear-gradient(135deg, ${color1}, ${color2})`;
-    }
+    },
   },
   created() {
-    this.employee = this.$root.$data.workers.find(worker => worker.id === this.id);
+    this.employee = this.workers.find((worker) => worker.id === this.id);
   },
   watch: {
     id: {
       immediate: true,
       handler(newId) {
-        this.employee = this.$root.$data.workers.find(worker => worker.id === newId);
-      }
-    }
-  }
+        this.employee = this.workers.find((worker) => worker.id === newId);
+      },
+    },
+  },
 };
 </script>
 

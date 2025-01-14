@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost/api';
+const API_URL = '/api';
 
 export const api = {
   // Workers

@@ -20,3 +20,4 @@ front/node_modules/**/*.map
 front/node_modules/axios/
 front/node_modules/vue/
 front/node_modules/vue-router/
+front/.vite/deps/package.json
