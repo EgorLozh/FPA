@@ -26,7 +26,8 @@ export default {
       linkRefs: [],
       highlightStyle: {
         width: '0px',
-        transform: 'translateX(0px)'
+        transform: 'translateX(0px)',
+        opacity: '0'
       }
     }
   },
@@ -75,6 +76,10 @@ export default {
     this.$nextTick(() => {
       this.updateHighlight();
     });
+    window.addEventListener('resize', this.updateHighlight);
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.updateHighlight);
   }
 };
 </script>
@@ -84,21 +89,21 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px; /* Increased padding */
+  padding: 15px 30px;
   background-color: var(--vt-c-white);
   color: var(--vt-c-black);
   position: sticky;
   top: 0;
   z-index: 1000;
-  background-color: #ffffff; /* Added background color */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Added shadow */
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .nav-links {
   position: relative;
   list-style: none;
   display: flex;
-  gap: 30px; /* Increased gap between links */
+  gap: 30px;
   flex-grow: 1;
   justify-content: center;
   padding: 0 20px;
@@ -122,16 +127,16 @@ export default {
   z-index: 1;
   color: var(--vt-c-black);
   text-decoration: none;
-  font-size: 18px; /* Increased font size */
-  transition: color 0.3s, transform 0.3s; /* Added transition for animation */
+  font-size: 18px;
+  transition: color 0.3s, transform 0.3s;
   padding: 8px 16px;
   border-radius: 4px;
   display: block;
 }
 
 .nav-links a:hover {
-  color: #2193f2; /* Added highlight color */
-  transform: scale(1.1); /* Added scale effect */
+  color: #2193f2;
+  transform: scale(1.1);
 }
 
 .router-link-active:not(.logo) {
@@ -146,19 +151,19 @@ export default {
 
 .logo {
   flex-grow: 1;
-  font-size: 24px; /* Increased font size */
-  transition: color 0.3s, transform 0.3s; /* Added transition for animation */
-  color: var(--vt-c-black) !important; /* Добавил !important */
+  font-size: 24px;
+  transition: color 0.3s, transform 0.3s;
+  color: var(--vt-c-black) !important;
   text-decoration: none;
 }
 
 .logo:hover {
-  color: #2193f2; /* Added highlight color */
-  transform: scale(1.1); /* Added scale effect */
+  color: #2193f2;
+  transform: scale(1.1);
 }
 
 .logo:active {
-  transform: scale(0.95); /* Added click effect */
+  transform: scale(0.95);
 }
 
 .actions {
