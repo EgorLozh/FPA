@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 from core.domain.entities.base import BaseEntity
 
@@ -13,4 +14,4 @@ class Script(BaseEntity):
 class ScriptAction(BaseEntity):
     text: str
     weight: float
-    script: 'Script' | None = None
+    script: Optional['Script'] = None

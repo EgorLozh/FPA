@@ -4,12 +4,12 @@ from ninja import Schema
 
 class CreateWorker(Schema):
     name: str
-    departement_id: int
+    departement_id: int | None = None
 
 class ResponseWorker(Schema):
     id: int
     name: str
-    departement_id: int
+    departement_id: int | None = None
 
 class WorkerFilterSchema(Schema):
     id: int | None = None
