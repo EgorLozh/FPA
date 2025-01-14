@@ -1,5 +1,5 @@
-# Используем официальный образ Node.js
-FROM node:16 as build-stage
+# Используем официальный образ Node.js версии 18 или выше
+FROM node:18 as build-stage
 
 # Устанавливаем рабочую директорию внутри контейнера
 WORKDIR /app
@@ -16,7 +16,7 @@ COPY . .
 # Собираем приложение
 RUN npm run build
 
-# Используем легковесный образ nginx для serving статических файлов
+# Используем легковесный образ Nginx для serving статических файлов
 FROM nginx:alpine as production-stage
 
 # Копируем собранные файлы из предыдущего этапа
@@ -25,5 +25,5 @@ COPY --from=build-stage /app/dist /usr/share/nginx/html
 # Открываем порт 80
 EXPOSE 80
 
-# Запускаем nginx
+# Запускаем Nginx
 CMD ["nginx", "-g", "daemon off;"]
