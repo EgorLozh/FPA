@@ -15,3 +15,8 @@ class ResponseDepartment(Schema):
     name: str
     description: str | None = None
     workers: list[WorkerInDepartment] = []
+
+class QueryDepartment(Schema):
+    id: int | None = None
+    name: str | None = None
+
