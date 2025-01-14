@@ -4,12 +4,12 @@ from core.domain.filters.report import ReportFilter
 
 
 @dataclass
-class CreateRequest(BaseEvent):
+class CreateRequestEvent(BaseEvent):
     video_url: str
     script_id: int
     worker_id: int
 
 
 @dataclass
-class GetReport(BaseEvent):
+class GetReportEvent(BaseEvent):
     report_filter: ReportFilter | None = None
