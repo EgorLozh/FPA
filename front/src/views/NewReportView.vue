@@ -91,7 +91,6 @@ export default {
     },
     analyzeAndSend() {
       if (this.isFormValid) {
-        // Here you would implement the actual file upload and analysis
         console.log('Analyzing report...', {
           file: this.selectedFile,
           script: this.script,

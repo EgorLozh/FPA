@@ -6,7 +6,7 @@
           <h3>Select Employee</h3>
           <button class="close-button" @click="close">&times;</button>
         </div>
-        
+
         <div class="search-controls">
           <SearchInput
             v-model="searchQuery"
@@ -24,20 +24,29 @@
         </div>
 
         <div class="employees-list">
-          <div v-for="employee in filteredEmployees" 
-               :key="employee.id" 
-               class="employee-item"
-               @click="selectEmployee(employee)">
-            <div class="avatar-container" 
-                 :class="{ 'no-image': !employee.avatar }"
-                 :style="{ background: !employee.avatar ? generateGradient(employee.id) : null }">
-              <div class="initials">{{ getInitials(employee.name) }}</div>
+          <template v-if="filteredEmployees.length > 0">
+            <div
+              v-for="employee in filteredEmployees"
+              :key="employee.id"
+              class="employee-item"
+              @click="selectEmployee(employee)"
+            >
+              <div
+                class="avatar-container"
+                :class="{ 'no-image': !employee.avatar }"
+                :style="{
+                  background: !employee.avatar ? generateGradient(employee.id) : null,
+                }"
+              >
+                <div class="initials">{{ getInitials(employee.name) }}</div>
+              </div>
+              <div class="employee-info">
+                <div class="employee-name">{{ employee.name }}</div>
+                <div class="employee-store">{{ getDepartmentName(employee) }}</div>
+              </div>
             </div>
-            <div class="employee-info">
-              <div class="employee-name">{{ employee.name }}</div>
-              <div class="employee-store">{{ getDepartmentName(employee) }}</div>
-            </div>
-          </div>
+          </template>
+          <div v-else class="no-results">No employees found.</div>
         </div>
       </div>
     </div>
@@ -45,23 +54,29 @@
 </template>
 
 <script>
-import SearchInput from './SearchInput.vue'
+import SearchInput from "./SearchInput.vue";
 
 export default {
-  name: 'EmployeeSearchModal',
+  name: "EmployeeSearchModal",
   components: { SearchInput },
   props: {
     show: Boolean,
-    employees: Array,
-    departments: Array // Переименовано с stores на departments
+    employees: {
+      type: Array,
+      default: () => [], // Установка значения по умолчанию
+    },
+    departments: {
+      type: Array,
+      default: () => [], // Установка значения по умолчанию
+    },
   },
   data() {
     return {
-      searchQuery: '',
-      sortKey: 'name',
-      sortOrder: 'asc',
-      filteredEmployees: []
-    }
+      searchQuery: "",
+      sortKey: "name",
+      sortOrder: "asc",
+      filteredEmployees: [],
+    };
   },
   watch: {
     show(newVal) {
@@ -73,22 +88,27 @@ export default {
     employees: {
       immediate: true,
       handler(newEmployees) {
-        this.filteredEmployees = [...newEmployees];
-        this.sortEmployees();
-      }
-    }
+        console.log("Employees:", newEmployees); // Для отладки
+        if (Array.isArray(newEmployees)) {
+          this.filteredEmployees = [...newEmployees];
+          this.sortEmployees();
+        } else {
+          this.filteredEmployees = []; // Запасной вариант
+        }
+      },
+    },
   },
   methods: {
     close() {
-      this.$emit('close');
+      this.$emit("close");
     },
     selectEmployee(employee) {
-      this.$emit('select', employee);
+      this.$emit("select", employee);
       this.close();
     },
     filterEmployees() {
       const query = this.searchQuery.toLowerCase();
-      this.filteredEmployees = this.employees.filter(employee =>
+      this.filteredEmployees = this.employees.filter((employee) =>
         employee.name.toLowerCase().includes(query)
       );
       this.sortEmployees();
@@ -96,23 +116,25 @@ export default {
     sortEmployees() {
       this.filteredEmployees.sort((a, b) => {
         let result = a.name.localeCompare(b.name);
-        return this.sortOrder === 'asc' ? result : -result;
+        return this.sortOrder === "asc" ? result : -result;
       });
     },
     toggleSortOrder() {
-      this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+      this.sortOrder = this.sortOrder === "asc" ? "desc" : "asc";
       this.sortEmployees();
     },
     getDepartmentName(employee) {
-      const department = this.departments.find(dept => dept.id === employee.departement_id);
-      return department ? department.name : 'Unknown Department';
+      const department = this.departments.find(
+        (dept) => dept.id === employee.departement_id
+      );
+      return department ? department.name : "Unknown Department";
     },
     getInitials(name) {
-      if (!name) return '?';
+      if (!name) return "?";
       return name
-        .split(' ')
-        .map(word => word[0])
-        .join('')
+        .split(" ")
+        .map((word) => word[0])
+        .join("")
         .toUpperCase()
         .slice(0, 2);
     },
@@ -123,9 +145,9 @@ export default {
       const color1 = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
       const color2 = `hsl(${(hue + 40) % 360}, ${saturation}%, ${lightness}%)`;
       return `linear-gradient(45deg, ${color1}, ${color2})`;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -267,6 +289,12 @@ select.button {
 
 select.button:hover {
   background-color: #f5f5f5;
+}
+
+.no-results {
+  text-align: center;
+  color: #666;
+  padding: 20px;
 }
 
 /* Transition classes */
