@@ -30,25 +30,29 @@ export default {
     departments: { // Принимаем отделы из API
       type: Array,
       required: true,
+      default: () => [], // Инициализируем пустым массивом по умолчанию
     },
   },
   data() {
     return {
       searchQuery: "",
-      filteredDepartments: this.departments,
+      filteredDepartments: [], // Инициализируем пустым массивом
       selectedDepartment: null,
     };
   },
   watch: {
     // Обновляем filteredDepartments при изменении departments
-    departments() {
-      this.filteredDepartments = this.departments;
+    departments: {
+      immediate: true, // Выполнить сразу при создании компонента
+      handler(newDepartments) {
+        this.filteredDepartments = newDepartments || [];
+      },
     },
   },
   methods: {
     filterDepartments() {
       const query = this.searchQuery.toLowerCase();
-      this.filteredDepartments = this.departments.filter((department) =>
+      this.filteredDepartments = (this.departments || []).filter((department) =>
         department.name.toLowerCase().includes(query)
       );
     },

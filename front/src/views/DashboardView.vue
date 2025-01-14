@@ -14,19 +14,33 @@ export default {
   name: "DashboardView",
   components: { Dashboard },
   props: {
-    employees: Array,
-    departments: Array, // Переименовано с stores на departments
+    employees: {
+      type: Array,
+      required: true,
+      default: () => [], // Инициализируем пустым массивом по умолчанию
+    },
+    departments: {
+      type: Array,
+      required: true,
+      default: () => [], // Инициализируем пустым массивом по умолчанию
+    },
   },
   computed: {
     departmentsWithEmployees() {
-      return this.departments.map(department => {
+      // Проверяем, что departments и employees не undefined
+      const departments = this.departments || [];
+      const employees = this.employees || [];
+
+      return departments.map((department) => {
         return {
           ...department,
-          employees: this.employees.filter(employee => employee.departement_id === department.id)
+          employees: employees.filter(
+            (employee) => employee.department_id === department.id // Исправлено на department_id
+          ),
         };
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
